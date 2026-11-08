@@ -22,7 +22,6 @@ private val ARMOR_SLOTS = setOf(EquipmentSlot.HEAD, EquipmentSlot.CHEST, Equipme
 
 fun Material.isArmor(): Boolean = equipmentSlot in ARMOR_SLOTS
 
-/** Oyuncunun kendi thread'inde çağrılmalı. Sığmayan eşyalar ayağının dibine düşer. */
 fun Player.giveOrDrop(vararg items: ItemStack) {
     inventory.addItem(*items).values.forEach { world.dropItem(location, it) }
 }

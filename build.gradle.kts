@@ -35,7 +35,6 @@ tasks {
 
     shadowJar {
         archiveClassifier.set("")
-        // Sunucuda Kotlin kullanan başka eklentilerle sürüm çakışmasın diye.
         relocate("kotlin", "com.r0ine.auraforge.libs.kotlin")
         relocate("kotlinx", "com.r0ine.auraforge.libs.kotlinx")
         relocate("org.intellij.lang.annotations", "com.r0ine.auraforge.libs.annotations.intellij")

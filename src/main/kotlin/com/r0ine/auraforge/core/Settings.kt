@@ -109,11 +109,6 @@ data class SetBonusSettings(
     @SerialName("per-piece") val perPiece: Double = 0.06,
 )
 
-/**
- * config.yml'yi JSON ağacına çevirip doğrudan [Settings] sınıfına çözer.
- * Kullanıcının dosyasında olmayan mesajlar jar içindeki varsayılanlardan tamamlanır;
- * tarifler ise yalnızca hiç `recipes` bölümü yoksa varsayılandan gelir, silinen tarif geri dönmez.
- */
 object SettingsLoader {
 
     private val json = Json {

@@ -29,7 +29,6 @@ class AbilityService(private val plugin: AuraForgePlugin) {
 
     fun Player.castAbility(type: AbilityType, quality: Int = 50, setPieces: Int = 0): Boolean {
         val now = System.currentTimeMillis()
-        // Bloğa sağ tık bazen hem blok hem hava etkileşimi olarak iki kez gelir.
         if (now - (lastCast[uniqueId] ?: 0L) < 250) return false
 
         val abilityName = plugin.text.render("ability-${type.key}")
@@ -68,7 +67,6 @@ class AbilityService(private val plugin: AuraForgePlugin) {
         return until >= System.currentTimeMillis()
     }
 
-    /** Çıkışta bekleme süreleri silinmez; aksi halde yeniden girerek sıfırlanabilirdi. */
     fun forget(playerId: UUID) {
         lastCast.remove(playerId)
         fallGrace.remove(playerId)

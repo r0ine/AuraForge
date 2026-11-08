@@ -23,10 +23,6 @@ data class BlockPos(val world: String, val x: Int, val y: Int, val z: Int) {
     }
 }
 
-/**
- * Tezgahın verisi. İçerik kendi kilidiyle korunur, bu yüzden hangi bölge thread'inden
- * okunduğu önemli değil. Dünyadaki görüntüsü [ForgeVisuals] üzerinden ayrıca yönetilir.
- */
 class Forge(
     val id: UUID,
     val owner: UUID,

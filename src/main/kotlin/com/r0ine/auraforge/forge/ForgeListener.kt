@@ -57,7 +57,6 @@ class ForgeListener(private val plugin: AuraForgePlugin) : Listener {
         }
 
         val held = player.inventory.getItem(hand)
-        // Bölge koruma eklentilerine (WorldGuard, claim eklentileri) sormanın en uyumlu yolu.
         val probe = BlockPlaceEvent(target, target.state, clicked, held, player, true, hand)
         if (!probe.callEvent() || !probe.canBuild()) {
             text.bar(player, "forge-protected")
@@ -96,7 +95,6 @@ class ForgeListener(private val plugin: AuraForgePlugin) : Listener {
         }
     }
 
-    // İstemci etkileşim varlığına sağ tıklayınca önce bu olayı, ardından yukarıdakini gönderir.
     @EventHandler(ignoreCancelled = true)
     fun onForgeUseAt(event: PlayerInteractAtEntityEvent) {
         if (forgeOf(event.rightClicked) != null) event.isCancelled = true
@@ -121,7 +119,6 @@ class ForgeListener(private val plugin: AuraForgePlugin) : Listener {
         val chunk = event.chunk
         val forges = plugin.forges.inChunk(chunk.world, chunk.x, chunk.z)
         if (forges.isEmpty()) return
-        // Chunk yüklenirken varlık eklemek yerine bir sonraki tick'e bırakıyoruz.
         Bukkit.getRegionScheduler().execute(plugin, chunk.world, chunk.x, chunk.z) {
             forges.forEach(plugin.forges::show)
         }

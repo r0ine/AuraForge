@@ -14,8 +14,6 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-// Bu fonksiyonlar oyuncunun kendi thread'inde çağrılmak üzere yazıldı (olay dinleyicileri zaten orada çalışır).
-
 fun Player.launchForward(power: Double) {
     val direction = location.direction.setY(0.0)
     if (direction.lengthSquared() < 1.0E-4) return

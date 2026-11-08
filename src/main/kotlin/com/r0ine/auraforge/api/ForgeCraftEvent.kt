@@ -6,10 +6,6 @@ import org.bukkit.event.HandlerList
 import org.bukkit.event.player.PlayerEvent
 import org.bukkit.inventory.ItemStack
 
-/**
- * Dövme bitip sonuç eşyası oyuncuya verilmeden hemen önce, oyuncunun thread'inde çağrılır.
- * İptal edilirse malzemeler tezgahta kalır; [result] değiştirilerek farklı bir eşya verilebilir.
- */
 class ForgeCraftEvent(
     player: Player,
     val recipeId: String,

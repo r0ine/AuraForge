@@ -11,10 +11,6 @@ import org.bukkit.plugin.Plugin
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.resume
 
-/**
- * Coroutine'i bir chunk'ın sahibi olan bölge thread'inde çalıştırır.
- * Paper'da bu ana thread'e, Folia'da ilgili bölgeye denk gelir.
- */
 class RegionDispatcher(
     private val plugin: Plugin,
     private val world: World,
@@ -26,7 +22,6 @@ class RegionDispatcher(
         !Bukkit.isOwnedByCurrentRegion(world, chunkX, chunkZ)
 
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        // Eklenti kapanırken zamanlayıcı görev kabul etmez; scope zaten iptal edilmiş olur.
         if (!plugin.isEnabled) return
         Bukkit.getRegionScheduler().execute(plugin, world, chunkX, chunkZ, block)
     }
@@ -38,10 +33,6 @@ class RegionDispatcher(
     }
 }
 
-/**
- * Coroutine'i bir varlığın (çoğunlukla oyuncunun) thread'ine bağlar.
- * Varlık dünyadan ayrılırsa coroutine iptal edilir, böylece askıda kalan iş birikmez.
- */
 class EntityDispatcher(
     private val plugin: Plugin,
     private val entity: Entity,

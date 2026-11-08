@@ -21,10 +21,6 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
-/**
- * Bir tezgahın dünyadaki varlıkları. Bütün metotlar tezgahın bulunduğu bölge thread'inde çağrılır.
- * Varlıklar kalıcı değildir; chunk boşaltılınca kaybolur, yüklenince [ForgeManager] yeniden kurar.
- */
 class ForgeVisuals(
     private val plugin: AuraForgePlugin,
     private val forge: Forge,

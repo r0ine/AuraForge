@@ -31,11 +31,6 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-/**
- * Zamanlamalı dövme. Her turda bar üzerinde bir imleç kayar; oyuncu eğilerek ya da tezgaha
- * sağ tıklayarak vuruşu yapar. İmlecin yeşil/altın bölgeye uzaklığı vuruşun puanını belirler.
- * Oturum oyuncunun thread'inde çalışır; oyuncu çıkarsa coroutine kendiliğinden iptal olur.
- */
 class CraftingService(private val plugin: AuraForgePlugin) : Listener {
 
     private enum class Hit(val score: Double, val message: String) {
