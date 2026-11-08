@@ -4,7 +4,7 @@ main: com.r0ine.auraforge.AuraForgePlugin
 api-version: '1.21'
 folia-supported: true
 author: r0ine
-description: Dünyaya kurulan, zamanlamayla dövülen yetenekli silah ve zırh tezgahı.
+description: Dövme tezgahı + büyü masası; süzülen malzemeler, zamanlamalı dövme, element kombinasyonlu büyü parşömenleri ve block display animasyonları.
 
 commands:
   auraforge:
@@ -17,10 +17,14 @@ permissions:
     default: true
   auraforge.place:
     default: true
+  auraforge.altar:
+    default: true
+  auraforge.cast:
+    default: true
   auraforge.give:
     default: op
   auraforge.reload:
     default: op
   auraforge.admin:
-    description: Başkalarının tezgahlarını yönetme ve tezgah sınırını aşma
+    description: Başkalarının tezgah ve masalarını yönetme, sınırları aşma
     default: op

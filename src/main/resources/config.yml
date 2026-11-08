@@ -1,42 +1,38 @@
-# AuraForge ayarları. Değişiklikler /auraforge reload ile uygulanır
-# (forge.core-recipe hariç, o yeniden başlatma ister).
+# AuraForge ayarları. /auraforge reload ile uygulanır.
+# (forge.core-recipe ve arcane.core-recipe değişince yeniden başlatma ister.)
 
 forge:
-  # Tezgahı kurmak için kullanılan eşya
   core-item: NETHER_STAR
-  # Forge Çekirdeği çalışma masasında üretilebilsin mi
   core-recipe: true
-  # Tezgahın görünen bloğu
   block: SMITHING_TABLE
-  # Tezgaha aynı anda konabilecek malzeme sayısı (en fazla 7)
   max-items: 6
-  # Oyuncu başına tezgah sınırı, 0 = sınırsız. auraforge.admin sınıra takılmaz.
   max-per-player: 3
   hologram-height: 2.1
-  # Süzülen eşyaların kaç tickte bir güncelleneceği
   animation-interval: 2
-  # Bu yarıçapta oyuncu yoksa animasyon durur
   view-distance: 32.0
+
+arcane:
+  core-item: ECHO_SHARD
+  core-recipe: true
+  block: ENCHANTING_TABLE
+  max-per-player: 2
+  hologram-height: 2.2
+  animation-interval: 2
 
 crafting:
   rounds: 3
-  # İmlecin barı baştan sona geçme süresi; her turda speed-up ile çarpılır
   sweep-ms: 1600
   speed-up: 0.8
-  # Yeşil bölgenin ve altın bölgenin bar üzerindeki genişliği (0-1 arası)
   zone-width: 0.2
   perfect-width: 0.06
   bar-length: 32
   pause-ticks: 14
 
 quality:
-  # Kalite 0 ve 100'deki yetenek gücü çarpanı
   power-min: 0.8
   power-max: 1.35
-  # Kalite 100'de bekleme süresinden düşülen oran
   cooldown-reduction: 0.3
 
-# cooldown saniye, duration tick cinsinden
 abilities:
   dash:
     cooldown: 3.0
@@ -52,16 +48,17 @@ abilities:
     cooldown: 16.0
     duration: 100
     amplifier: 1
+  wave:
+    cooldown: 12.0
+    radius: 5.5
+    damage: 4.0
 
-# Aynı yeteneği taşıyan zırh parçası sayısı min-pieces'e ulaşınca
-# parça başına per-piece kadar güç eklenir.
 set-bonus:
   min-pieces: 2
   per-piece: 0.06
 
 autosave-seconds: 30
 
-# Malzemeler tezgahtakilerle birebir eşleşmeli. Toplam adet max-items'ı geçemez.
 recipes:
   ruzgar-kilici:
     ability: dash
@@ -140,30 +137,209 @@ recipes:
       OAK_PLANKS: 3
       OBSIDIAN: 1
       AMETHYST_SHARD: 1
+  firtina-kilici:
+    ability: wave
+    result: NETHERITE_SWORD
+    name: "<gradient:#A8E6CF:#4FC3F7>Fırtına Kılıcı</gradient>"
+    description: "<gray>Etraftaki düşmanları savurur."
+    ingredients:
+      NETHERITE_INGOT: 1
+      BREEZE_ROD: 2
+      PHANTOM_MEMBRANE: 1
+      FEATHER: 2
+
+# Büyü kombinasyonları. İki element birleştirilince masada bir parşömen ortaya çıkar.
+# "elements" iki elementten oluşur; aynı elementi iki kez yazmak da geçerli.
+# Geçerli element anahtarları: fire, wind, ice, thunder, earth
+# Geçerli efektler: fire_tornado, gale_wave, plasma_lance, magma_pillar, glacier_wall,
+#                   thunderclap, blizzard, inferno, storm_surge, stone_fist, steam_burst, dust_devil
+spells:
+  atesli-kasirga:
+    elements: [fire, wind]
+    effect: fire_tornado
+    name: "<gradient:#FF5E62:#A8E6CF>Ateşli Kasırga</gradient>"
+    description: "<gray>Önünde dönen bir alev sütunu yürütür, düşmanları içine çeker."
+    cooldown: 18.0
+    power: 2.5
+    radius: 4.0
+    range: 8.0
+    duration: 70
+    result: FIRE_CHARGE
+  dalgalar-ruzgari:
+    elements: [wind, wind]
+    effect: gale_wave
+    name: "<gradient:#A8E6CF:#8EC5FC>Dalgalar Rüzgârı</gradient>"
+    description: "<gray>Etrafındaki düşmanları ışık halkasıyla uçurur."
+    cooldown: 10.0
+    power: 2.0
+    radius: 6.0
+    range: 0.0
+    duration: 20
+    result: PAPER
+  plazma-mizragi:
+    elements: [fire, thunder]
+    effect: plasma_lance
+    name: "<gradient:#FF5E62:#FFF176>Plazma Mızrağı</gradient>"
+    description: "<gray>Baktığın yöne bir elektrik-alev huzmesi atar."
+    cooldown: 12.0
+    power: 3.5
+    radius: 1.5
+    range: 14.0
+    duration: 24
+    result: END_ROD
+  magma-sutunu:
+    elements: [fire, earth]
+    effect: magma_pillar
+    name: "<gradient:#FFB347:#FF5E62>Magma Sütunu</gradient>"
+    description: "<gray>Hedef noktada yerden alev sütunu çıkarır."
+    cooldown: 16.0
+    power: 2.5
+    radius: 3.0
+    range: 16.0
+    duration: 40
+    result: MAGMA_CREAM
+  buzul-duvari:
+    elements: [ice, earth]
+    effect: glacier_wall
+    name: "<gradient:#9AD5FF:#C38B5A>Buzul Duvarı</gradient>"
+    description: "<gray>Önüne buz duvarı diker, dokunanı dondurur."
+    cooldown: 14.0
+    power: 2.0
+    radius: 5.0
+    range: 4.0
+    duration: 80
+    result: BLUE_ICE
+  gok-gurultusu:
+    elements: [wind, thunder]
+    effect: thunderclap
+    name: "<gradient:#FFF176:#A8E6CF>Gök Gürültüsü</gradient>"
+    description: "<gray>Baktığın noktaya ışınlanır ve çevreyi savurur."
+    cooldown: 18.0
+    power: 2.5
+    radius: 4.5
+    range: 18.0
+    duration: 20
+    result: LIGHTNING_ROD
+  kar-firtinasi:
+    elements: [wind, ice]
+    effect: blizzard
+    name: "<gradient:#A8E6CF:#9AD5FF>Kar Fırtınası</gradient>"
+    description: "<gray>Önüne kar konisi püskürtür, dondurur."
+    cooldown: 10.0
+    power: 1.4
+    radius: 4.0
+    range: 9.0
+    duration: 60
+    result: SNOWBALL
+  cehennem-alani:
+    elements: [fire, fire]
+    effect: inferno
+    name: "<gradient:#FF5E62:#FFB347>Cehennem Alanı</gradient>"
+    description: "<gray>Çevresinde yanan bir alan açar."
+    cooldown: 14.0
+    power: 2.0
+    radius: 4.5
+    range: 0.0
+    duration: 80
+    result: FIRE_CHARGE
+  firtina-zinciri:
+    elements: [thunder, thunder]
+    effect: storm_surge
+    name: "<gradient:#FFF176:#FFB347>Fırtına Zinciri</gradient>"
+    description: "<gray>En yakın düşmana sıçrayan yıldırım yollar."
+    cooldown: 15.0
+    power: 3.0
+    radius: 7.0
+    range: 20.0
+    duration: 20
+    result: COPPER_INGOT
+  tas-yumruk:
+    elements: [earth, earth]
+    effect: stone_fist
+    name: "<gradient:#C38B5A:#8E6E4E>Taş Yumruk</gradient>"
+    description: "<gray>Dönen taş topu fırlatır."
+    cooldown: 8.0
+    power: 2.5
+    radius: 2.0
+    range: 16.0
+    duration: 30
+    result: COBBLESTONE
+  buhar-patlamasi:
+    elements: [fire, ice]
+    effect: steam_burst
+    name: "<gradient:#FF5E62:#9AD5FF>Buhar Patlaması</gradient>"
+    description: "<gray>Etraftaki düşmanları buharla savurur."
+    cooldown: 11.0
+    power: 2.0
+    radius: 4.0
+    range: 0.0
+    duration: 20
+    result: GLASS_BOTTLE
+  toz-sarmali:
+    elements: [wind, earth]
+    effect: dust_devil
+    name: "<gradient:#C38B5A:#A8E6CF>Toz Sarmalı</gradient>"
+    description: "<gray>Hedef noktada düşmanları kendine çeken küçük bir hortum oluşturur."
+    cooldown: 13.0
+    power: 1.5
+    radius: 4.0
+    range: 12.0
+    duration: 60
+    result: BROWN_CONCRETE_POWDER
 
 messages:
   prefix: "<gradient:#FFB347:#FF5E62><bold>AuraForge</bold></gradient> <dark_gray>»</dark_gray>"
   help:
     - "<prefix> <gray>Komutlar:"
-    - "<yellow>/af recipes</yellow> <dark_gray>-</dark_gray> <gray>tarifleri listeler"
-    - "<yellow>/af list</yellow> <dark_gray>-</dark_gray> <gray>tezgahlarını gösterir"
+    - "<yellow>/af recipes</yellow> <dark_gray>-</dark_gray> <gray>dövme tarifleri"
+    - "<yellow>/af spells</yellow> <dark_gray>-</dark_gray> <gray>büyü kombinasyonları"
+    - "<yellow>/af elements</yellow> <dark_gray>-</dark_gray> <gray>elementler ve rune malzemeleri"
+    - "<yellow>/af list</yellow> <dark_gray>-</dark_gray> <gray>tezgah ve masaların"
     - "<yellow>/af stats [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>demirci istatistikleri"
-    - "<yellow>/af give [oyuncu] [adet]</yellow> <dark_gray>-</dark_gray> <gray>Forge Çekirdeği verir"
-    - "<yellow>/af item <tarif> [kalite] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır eşya verir"
+    - "<yellow>/af give [oyuncu] [adet]</yellow> <dark_gray>-</dark_gray> <gray>Forge Çekirdeği"
+    - "<yellow>/af altar [oyuncu] [adet]</yellow> <dark_gray>-</dark_gray> <gray>Büyü Çekirdeği"
+    - "<yellow>/af rune <element> [adet] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>rune malzemesi"
+    - "<yellow>/af item <tarif> [kalite] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır silah/zırh"
+    - "<yellow>/af scroll <büyü> [güç] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır parşömen"
     - "<yellow>/af reload</yellow> <dark_gray>-</dark_gray> <gray>ayarları yeniden yükler"
   no-permission: "<prefix> <red>Bunun için yetkin yok."
   player-only: "<prefix> <red>Bu komut yalnızca oyun içinden kullanılabilir."
   player-not-found: "<prefix> <red>Oyuncu bulunamadı."
   unknown-recipe: "<prefix> <red>Böyle bir tarif yok. <gray>/af recipes</gray> ile bakabilirsin."
-  reloaded: "<prefix> <green>Ayarlar yeniden yüklendi, <white><count></white> tarif aktif."
+  unknown-spell: "<prefix> <red>Böyle bir büyü yok. <gray>/af spells</gray> ile bakabilirsin."
+  unknown-element: "<prefix> <red>'<key>' bir element değil. <gray>fire, wind, ice, thunder, earth"
+  rune-usage: "<prefix> <gray>Kullanım: <white>/af rune <element> [adet] [oyuncu]"
+  reloaded: "<prefix> <green>Ayarlar yüklendi, <white><recipes></white> tarif ve <white><spells></white> büyü aktif."
   reload-failed: "<prefix> <red>config.yml okunamadı, eski ayarlar korunuyor. Ayrıntı konsolda."
   give-core: "<prefix> <white><player></white> <gray>oyuncusuna <white><amount></white> Forge Çekirdeği verildi."
+  give-altar: "<prefix> <white><player></white> <gray>oyuncusuna <white><amount></white> Büyü Çekirdeği verildi."
+  give-rune: "<prefix> <white><player></white> <gray>oyuncusuna</gray> <white><amount></white> <element> <gray>rune verildi."
   give-item: "<prefix> <white><player></white> <gray>oyuncusuna</gray> <item> <gray>verildi."
+  give-scroll: "<prefix> <white><player></white> <gray>oyuncusuna</gray> <item> <gray>verildi."
 
   core-name: "<gradient:#FFB347:#FF5E62><bold>Forge Çekirdeği</bold></gradient>"
   core-lore:
     - "<gray>Bir bloğa sağ tıklayarak"
     - "<gray>AuraForge tezgahı kurarsın."
+  altar-core-name: "<gradient:#A855F7:#60A5FA><bold>Büyü Çekirdeği</bold></gradient>"
+  altar-core-lore:
+    - "<gray>Bir bloğa sağ tıklayarak"
+    - "<gray>Büyü Masası kurarsın."
+    - "<dark_gray>İki rune birleştirip parşömen üretir."
+
+  rune-name: "<color:#DCA3FF><bold><element></bold></color> <gray>Rune"
+  rune-lore:
+    - "<gray>Büyü masasına koyarak"
+    - "<gray>büyü kombinasyonu yarat."
+
+  element-fire: "<color:#FF5A3C>Ateş</color>"
+  element-wind: "<color:#A8E6CF>Rüzgâr</color>"
+  element-ice: "<color:#9AD5FF>Buz</color>"
+  element-thunder: "<color:#FFF176>Şimşek</color>"
+  element-earth: "<color:#C38B5A>Toprak</color>"
+
+  elements-header: "<prefix> <gray>Elementler:"
+  element-line: " <dark_gray>•</dark_gray> <name> <dark_gray>·</dark_gray> <gray>rune: <white><rune>"
 
   forge-placed: "<green>Tezgah kuruldu. <gray>Elindeki eşyayla sağ tıklayıp malzeme koy."
   forge-blocked: "<red>Tezgah buraya sığmıyor."
@@ -178,11 +354,29 @@ messages:
   forge-item-taken: "<item> <gray>geri alındı."
   forge-dismantled: "<yellow>Tezgah toplandı, malzemeler ve çekirdek envanterine eklendi."
 
+  altar-placed: "<green>Büyü masası kuruldu. <gray>Sağ tıklayıp rune koy."
+  altar-blocked: "<red>Masa buraya sığmıyor."
+  altar-protected: "<red>Burada inşa etme iznin yok."
+  altar-limit: "<red>En fazla <white><max></white> büyü masan olabilir."
+  altar-not-yours: "<red>Bu masa <white><owner></white> oyuncusuna ait."
+  altar-busy: "<yellow>Başka biri bu masayı kullanıyor."
+  altar-dismantled: "<yellow>Masa toplandı, rune'lar ve çekirdek envanterine eklendi."
+  altar-need-both: "<red>İki rune de yerinde olmalı."
+  altar-no-recipe: "<red>Bu iki rune eşleşmiyor."
+  altar-combined: "<prefix> <gray>Parşömen üretildi: <name>"
+
   hologram: "<gradient:#FFB347:#FF5E62><bold>AuraForge</bold></gradient><newline><gray>Usta: <white><owner></white><newline><gray>Malzeme: <white><count>/<max></white><newline><status>"
   hologram-empty: "<dark_gray>Malzeme bekleniyor"
   hologram-unknown: "<red>Tarif eşleşmiyor"
   hologram-ready: "<green>Hazır:</green> <recipe>"
   hologram-crafting: "<gold>⚒ <white><player></white> dövüyor"
+
+  altar-hologram: "<gradient:#A855F7:#60A5FA><bold>Büyü Masası</bold></gradient><newline><gray>Sahibi: <white><owner></white><newline><gray>Üretim: <white><combines></white><newline><status>"
+  altar-hologram-empty: "<dark_gray>Rune bekleniyor"
+  altar-hologram-half: "<yellow>İkinci rune eksik"
+  altar-hologram-unknown: "<red>Eşleşmeyen çift"
+  altar-hologram-ready: "<green>Hazır:</green> <spell>"
+  altar-hologram-active: "<aqua>✧ <white><player></white> çalışıyor"
 
   menu-title: "<dark_gray>AuraForge Tezgahı"
   menu-slot-empty: "<gray>Boş yuva"
@@ -211,9 +405,42 @@ messages:
     - "<gray>Malzemeler ve Forge Çekirdeği"
     - "<gray>envanterine geri döner."
 
+  altar-menu-title: "<dark_gray>Büyü Masası"
+  altar-slot-left: "<light_purple>Sol Rune Yuvası"
+  altar-slot-right: "<light_purple>Sağ Rune Yuvası"
+  altar-slot-hint:
+    - "<dark_gray>Envanterinden shift+tık"
+    - "<dark_gray>ile rune yerleştir."
+  altar-result-name: "<aqua>Parşömen: <name>"
+  altar-result-lore:
+    - "<gray>Elementler: <elements>"
+    - ""
+    - "<dark_gray>Birleştir düğmesine bas."
+  altar-result-empty: "<gray>Sonuç"
+  altar-result-unknown: "<red>Eşleşmeyen çift"
+  altar-combine: "<green>Birleştir"
+  altar-combine-lore:
+    - "<gray>Üretir: <name>"
+    - "<dark_gray>Kombinasyonlar güçlenir."
+  altar-combine-disabled: "<red>Birleştir"
+  altar-combine-disabled-lore:
+    - "<gray>Her iki rune de yerinde"
+    - "<gray>ve eşleşmelidir."
+  altar-return: "<yellow>Pencereyi Kapat"
+  altar-recipes: "<aqua>Kombinasyon Listesi"
+  altar-recipes-lore:
+    - "<gray>Büyü kombinasyonlarını görür."
+  altar-dismantle: "<red>Masayı Topla"
+  altar-dismantle-lore:
+    - "<gray>Rune'lar ve Büyü Çekirdeği"
+    - "<gray>envanterine döner."
+
   recipes-header: "<prefix> <gray>Tarifler:"
   recipes-empty: "<prefix> <gray>Hiç tarif tanımlanmamış."
   recipe-line: " <dark_gray>•</dark_gray> <name> <dark_gray>(<ability>)</dark_gray><newline>   <gray><ingredients>"
+  spells-header: "<prefix> <gray>Büyü kombinasyonları:"
+  spells-empty: "<prefix> <gray>Hiç büyü tanımlanmamış."
+  spell-line: " <dark_gray>•</dark_gray> <name> <dark_gray>(</dark_gray><elements><dark_gray>)"
 
   crafting-start: "<gray>Dövme başlıyor: <recipe>"
   crafting-bar: "<gold>⚒ <round>/<rounds></gold>  <bar>"
@@ -239,8 +466,23 @@ messages:
   ability-leap: "Sıçrayış"
   ability-shockwave: "Şok Dalgası"
   ability-guard: "Muhafız"
+  ability-wave: "Kalkan Dalgası"
   ability-used: "<green><ability></green> <gray>kullanıldı."
   ability-cooldown: "<red><ability></red> <gray>hazır değil: <yellow><seconds> sn"
+
+  spell-cast: "<light_purple>✧</light_purple> <name> <gray>uyandırıldı."
+  spell-cooldown: "<red><name></red> <gray>yeniden toplanıyor: <yellow><seconds> sn"
+
+  scroll-name: "<name> <dark_gray>[<tier><dark_gray>]"
+  scroll-tier-flicker: "<gray>Titrek"
+  scroll-tier-steady: "<white>Dengeli"
+  scroll-tier-mystic: "<aqua>Mistik"
+  scroll-tier-arcane: "<light_purple>Kutsal"
+  scroll-lore-elements: "<gray>Elementler: <elements>"
+  scroll-lore-power: "<gray>Güç: <white>%<power></white>"
+  scroll-lore-cooldown: "<gray>Bekleme: <white><cooldown> sn"
+  scroll-lore-author: "<gray>Büyücü: <white><author>"
+  scroll-lore-use: "<dark_gray>Sağ tık ile kullan."
 
   item-name: "<name> <dark_gray>[<tier><dark_gray>]"
   lore-ability: "<gray>Yetenek: <white><ability>"
@@ -252,6 +494,7 @@ messages:
 
   stats: "<prefix> <white><player></white><newline> <gray>Dövülen eşya: <white><crafted></white><newline> <gray>Kusursuz vuruş: <white><perfect></white><newline> <gray>En iyi kalite: <white><best></white>"
   stats-empty: "<prefix> <gray>Bu oyuncu henüz bir şey dövmemiş."
-  list-header: "<prefix> <gray>Tezgahların:"
-  list-line: " <dark_gray>•</dark_gray> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<count> malzeme, <crafts> dövme)"
+  list-header: "<prefix> <gray>Tezgah ve masaların:"
+  list-line: " <dark_gray>•</dark_gray> <gold>⚒</gold> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<count> malzeme, <crafts> dövme)"
+  list-altar-line: " <dark_gray>•</dark_gray> <light_purple>✧</light_purple> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<combines> üretim)"
   list-empty: "<prefix> <gray>Hiç tezgahın yok."

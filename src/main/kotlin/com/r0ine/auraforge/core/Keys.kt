@@ -16,6 +16,13 @@ class Keys(plugin: Plugin) {
     val recipe = NamespacedKey(plugin, "recipe")
     val smith = NamespacedKey(plugin, "smith")
     val forgedAt = NamespacedKey(plugin, "forged_at")
+    val altar = NamespacedKey(plugin, "altar")
+    val altarCore = NamespacedKey(plugin, "altar_core")
+    val altarCoreRecipe = NamespacedKey(plugin, "altar_core_recipe")
+    val element = NamespacedKey(plugin, "element")
+    val rune = NamespacedKey(plugin, "rune")
+    val spell = NamespacedKey(plugin, "spell")
+    val scrollPower = NamespacedKey(plugin, "scroll_power")
 }
 
 private val ARMOR_SLOTS = setOf(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)

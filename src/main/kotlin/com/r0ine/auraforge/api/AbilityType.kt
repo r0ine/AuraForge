@@ -15,7 +15,10 @@ enum class AbilityType {
     SHOCKWAVE,
 
     @SerialName("guard")
-    GUARD;
+    GUARD,
+
+    @SerialName("wave")
+    WAVE;
 
     val key: String get() = name.lowercase()
 

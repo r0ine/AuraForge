@@ -51,6 +51,7 @@ class AbilityService(private val plugin: AuraForgePlugin) {
             }
             AbilityType.SHOCKWAVE -> triggerShockwave(settings.radius * (1 + (factor - 1) / 2), settings.damage * factor)
             AbilityType.GUARD -> guard((settings.duration * factor).roundToInt(), settings.amplifier)
+            AbilityType.WAVE -> plugin.spellEffects.playShieldWave(this, settings.radius * (1 + (factor - 1) / 2), factor, settings.damage * factor)
         }
 
         lastCast[uniqueId] = now

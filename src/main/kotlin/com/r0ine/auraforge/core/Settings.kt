@@ -19,12 +19,14 @@ import java.io.File
 @Serializable
 data class Settings(
     val forge: ForgeSettings = ForgeSettings(),
+    val arcane: ArcaneSettings = ArcaneSettings(),
     val crafting: CraftingSettings = CraftingSettings(),
     val quality: QualitySettings = QualitySettings(),
     val abilities: Map<AbilityType, AbilitySettings> = emptyMap(),
     @SerialName("set-bonus") val setBonus: SetBonusSettings = SetBonusSettings(),
     @SerialName("autosave-seconds") val autosaveSeconds: Int = 30,
     val recipes: Map<String, JsonElement> = emptyMap(),
+    val spells: Map<String, JsonElement> = emptyMap(),
     val messages: Map<String, JsonElement> = emptyMap(),
 ) {
     fun ability(type: AbilityType): AbilitySettings = abilities[type] ?: AbilitySettings()
@@ -54,8 +56,26 @@ data class Settings(
             ),
             setBonus = setBonus.copy(minPieces = setBonus.minPieces.coerceIn(1, 4)),
             autosaveSeconds = autosaveSeconds.coerceIn(10, 3600),
+            arcane = arcane.copy(
+                maxPerPlayer = arcane.maxPerPlayer.coerceAtLeast(0),
+                animationInterval = arcane.animationInterval.coerceIn(1, 10),
+            ),
         )
     }
+}
+
+@Serializable
+data class ArcaneSettings(
+    @SerialName("core-item") val coreItem: String = "ECHO_SHARD",
+    @SerialName("core-recipe") val coreRecipe: Boolean = true,
+    val block: String = "ENCHANTING_TABLE",
+    @SerialName("max-per-player") val maxPerPlayer: Int = 2,
+    @SerialName("hologram-height") val hologramHeight: Double = 2.2,
+    @SerialName("animation-interval") val animationInterval: Long = 2,
+) {
+    fun coreMaterial(): Material = Material.matchMaterial(coreItem)?.takeIf { it.isItem } ?: Material.ECHO_SHARD
+    fun blockData(): BlockData =
+        (Material.matchMaterial(block)?.takeIf { it.isBlock } ?: Material.ENCHANTING_TABLE).createBlockData()
 }
 
 @Serializable
@@ -132,6 +152,7 @@ object SettingsLoader {
         return loaded.copy(
             abilities = defaults.abilities + loaded.abilities,
             recipes = if (user.contains("recipes")) loaded.recipes else defaults.recipes,
+            spells = if (user.contains("spells")) loaded.spells else defaults.spells,
             messages = defaults.messages + loaded.messages,
         ).normalized()
     }

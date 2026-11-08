@@ -31,10 +31,23 @@ data class SmithRecord(
 )
 
 @Serializable
+data class AltarRecord(
+    val id: String,
+    val owner: String,
+    val ownerName: String,
+    val world: String,
+    val x: Int,
+    val y: Int,
+    val z: Int,
+    val combines: Int = 0,
+)
+
+@Serializable
 data class SaveFile(
     val version: Int = 1,
     val forges: List<ForgeRecord> = emptyList(),
     val smiths: Map<String, SmithRecord> = emptyMap(),
+    val altars: List<AltarRecord> = emptyList(),
 )
 
 class Storage(private val file: File, private val logger: Logger) {

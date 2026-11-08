@@ -1,9 +1,11 @@
 # AuraForge
 
-Paper ve Folia için Kotlin ile yazılmış bir dövme tezgahı eklentisi. Oyuncu dünyaya bir tezgah kurar,
-malzemeleri üstüne koyar, malzemeler tezgahın üstünde dönmeye başlar. Dövme sırasında ekranda kayan bir
-imleç çıkar; doğru anda vuran oyuncu daha kaliteli bir eşya alır. Çıkan silah ve zırhların sağ tık ya da
-eğilip zıplamayla tetiklenen yetenekleri vardır.
+Paper ve Folia için Kotlin ile yazılmış bir dövme tezgahı + büyü masası eklentisi. Oyuncu dünyaya bir
+tezgah kurar, malzemeleri üstüne koyar, malzemeler tezgahın üstünde dönmeye başlar. Dövme sırasında
+ekranda kayan bir imleç çıkar; doğru anda vuran oyuncu daha kaliteli bir eşya alır. Çıkan silah ve
+zırhların sağ tık ya da eğilip zıplamayla tetiklenen yetenekleri vardır. İkinci bir masa daha var:
+büyü masası. İki rune'u birleştirince element kombinasyonuna göre parşömen çıkıyor — ateş + rüzgâr
+ateşli kasırga veriyor, rüzgâr + rüzgâr dalga kalkanı, ateş + şimşek plazma mızrağı, böyle 12 tane.
 
 - Paper 1.21.4 ve üzeri, Folia (`folia-supported: true`)
 - Java 21, Kotlin 2.4, kotlinx.coroutines, kotlinx.serialization
@@ -30,20 +32,64 @@ dövmeyi başlatma ve tezgahı toplama. Envanterden shift+tık ile de malzeme ko
 | Sıçrayış (`leap`) | Yukarı ve ileri fırlama, iniş hasarı yok |
 | Şok Dalgası (`shockwave`) | Çevredeki canlılara hasar ve geri itme |
 | Muhafız (`guard`) | Direnç ve emilim etkisi |
+| Kalkan Dalgası (`wave`) | Block display halkası dışa doğru genişler, yakalanan canlılar uçar |
 
 Silah ve kalkanlar sağ tıkla, zırhlar giyiliyken **eğilip zıplayınca** çalışır. Kalite gücü artırır ve
 bekleme süresini kısaltır. Aynı yeteneği taşıyan zırh parçaları (varsayılan 2 ve üzeri) set bonusu verir.
 
+## Büyü masası
+
+Bir **Büyü Çekirdeği** (`/af altar`, veya `lapis + amethyst + echo_shard` tarifi) bir bloğa sağ
+tıklayınca bir büyü masası oluşturur. Masaya sağ tıklayarak iki yuvalı GUI açılır:
+
+1. İki yuvaya birer **rune** koy (`/af rune fire | wind | ice | thunder | earth`).
+2. Masa iki rune'u tanıyınca sonuç yuvası eşleşen parşömeni önizler.
+3. "Birleştir"e bas, karşılığında büyü parşömenini al.
+4. Parşömene sağ tıklayarak büyüyü kullan (parşömen tek kullanımlıktır).
+
+12 kombinasyon:
+
+| Elementler | Büyü | Efekt |
+|---|---|---|
+| Ateş + Rüzgâr | Ateşli Kasırga | Önünde yürüyen alev sütunu, düşmanları çeker ve yakar |
+| Rüzgâr + Rüzgâr | Dalgalar Rüzgârı | Genişleyen cam halkası, çevredekileri savurur |
+| Ateş + Şimşek | Plazma Mızrağı | Baktığın yönde çizgisel bir hüzme |
+| Ateş + Toprak | Magma Sütunu | Hedef noktada yükselen magma kulesi |
+| Buz + Toprak | Buzul Duvarı | Önüne 5x3 buz duvarı diker, dokunanı dondurur |
+| Rüzgâr + Şimşek | Gök Gürültüsü | Hedef noktaya ışınlan + yıldırım halkası |
+| Rüzgâr + Buz | Kar Fırtınası | Önüne kar konisi püskürtür |
+| Ateş + Ateş | Cehennem Alanı | Çevreni alevli bir arenaya çevirir |
+| Şimşek + Şimşek | Fırtına Zinciri | En yakın düşmana sıçrayan yıldırım |
+| Toprak + Toprak | Taş Yumruk | Dönerek giden taş topu fırlatır |
+| Ateş + Buz | Buhar Patlaması | Radyal buhar itmesi |
+| Rüzgâr + Toprak | Toz Sarmalı | Hedef noktada düşmanları kendine çeken hortum |
+
+Her parşömen 1-10 arası bir **güç** değeriyle çıkar; güç yüksekse büyünün alanı, menzili ve süresi
+artar, bekleme süresi düşer. Aynı iki rune kullanılırsa güç biraz daha yüksek başlar.
+
+### Block display animasyonları
+
+Büyülerin görsel kısmı Minecraft 1.21 block display varlıklarıyla yapılır: her tick transformasyon
+interpolasyonuyla dönme, ölçekleme ve taşıma. Parçacık efekti değil tam blok görseli — Buzul Duvarı
+gerçek buz blokları, Magma Sütunu yerden çıkan magma, Taş Yumruk dönen taş bloğu. Tezgah ve masanın
+kendi görselleri de aynı sistemle çalışır. Tüm entity'ler persistent değildir; chunk boşalınca kaybolur,
+yüklenince yönetici geri kurar.
+
 ## Komutlar ve yetkiler
 
-| Komut | Yetki | Açıklama |
+| Komut | Yetki | Ne yapar |
 |---|---|---|
-| `/af recipes` | `auraforge.use` | Tarifleri listeler |
-| `/af list` | `auraforge.use` | Kendi tezgahlarının konumu |
-| `/af stats [oyuncu]` | `auraforge.use` | Dövülen eşya, kusursuz vuruş, en iyi kalite |
+| `/af recipes` | `auraforge.use` | Dövme tariflerini listeler |
+| `/af spells` | `auraforge.use` | Büyü kombinasyonlarını listeler |
+| `/af elements` | `auraforge.use` | Elementleri ve rune malzemelerini listeler |
+| `/af list` | `auraforge.use` | Tezgahlarının ve masalarının konumu |
+| `/af stats [oyuncu]` | `auraforge.use` | Dövme istatistikleri |
 | `/af give [oyuncu] [adet]` | `auraforge.give` | Forge Çekirdeği verir |
-| `/af item <tarif> [kalite] [oyuncu]` | `auraforge.give` | Hazır yetenekli eşya verir (test için) |
-| `/af reload` | `auraforge.reload` | Ayarları ve tarifleri yeniden yükler |
+| `/af altar [oyuncu] [adet]` | `auraforge.give` | Büyü Çekirdeği verir |
+| `/af rune <element> [adet] [oyuncu]` | `auraforge.give` | Rune verir |
+| `/af item <tarif> [kalite] [oyuncu]` | `auraforge.give` | Hazır yetenekli eşya verir |
+| `/af scroll <büyü> [güç] [oyuncu]` | `auraforge.give` | Hazır parşömen verir |
+| `/af reload` | `auraforge.reload` | config.yml'yi yeniden yükler |
 
 `auraforge.place` tezgah kurmayı, `auraforge.admin` başkasının tezgahını kullanmayı ve oyuncu başına
 tezgah sınırını aşmayı sağlar. Tezgah kurulurken bir `BlockPlaceEvent` sorgulanır, yani WorldGuard ya da
