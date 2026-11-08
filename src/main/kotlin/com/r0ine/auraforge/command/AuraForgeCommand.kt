@@ -26,6 +26,9 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
             "recipes" -> plugin.sendRecipes(sender)
             "spells" -> plugin.sendSpells(sender)
             "elements" -> sendElements(sender)
+            "tree" -> (sender as? Player)?.let { plugin.progressMenus.openTree(it, null) } ?: text.send(sender, "player-only")
+            "codex" -> (sender as? Player)?.let { plugin.progressMenus.openCodex(it, null) } ?: text.send(sender, "player-only")
+            "set" -> setProgress(sender, args)
             "stats" -> stats(sender, args)
             "list" -> list(sender)
             "reload" -> reload(sender)
@@ -43,6 +46,7 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
                 "item" -> plugin.recipes.ids
                 "rune" -> SpellElement.entries.map { it.key }
                 "scroll" -> plugin.spells.book.ids
+                "set" -> listOf("level", "plus")
                 else -> emptyList()
             }
             3 -> when (sub) {
@@ -50,6 +54,7 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
                 "item" -> listOf("50", "75", "95")
                 "rune" -> listOf("1", "4", "16")
                 "scroll" -> listOf("3", "6", "9")
+                "set" -> if (args[1].equals("plus", true)) listOf("0", "5", "10") else listOf("1", "10", "30")
                 else -> emptyList()
             }
             4 -> when (sub) {
@@ -109,6 +114,23 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
         val item = plugin.items.create(recipe, quality, sender.name)
         plugin.runFor(target) { target.giveOrDrop(item) }
         text.send(sender, "give-item", tag("item", item.displayName()), tag("player", target.name))
+    }
+
+    private fun setProgress(sender: CommandSender, args: Array<out String>) {
+        if (!sender.allowed("auraforge.give")) return
+        val player = sender as? Player ?: return text.send(sender, "player-only")
+        val field = args.getOrNull(1)?.lowercase()
+        val value = args.getOrNull(2)?.toIntOrNull()
+        if (field !in setOf("level", "plus") || value == null) return text.send(sender, "set-usage")
+        val item = player.inventory.itemInMainHand
+        val updated = plugin.items.update(item) {
+            when (field) {
+                "level" -> it.copy(level = value.coerceIn(1, plugin.settings.progression.maxLevel), xp = 0, talents = emptyMap())
+                else -> it.copy(plus = value.coerceIn(0, plugin.settings.enhance.maxPlus))
+            }
+        } ?: return text.send(sender, "hub-no-weapon")
+        player.inventory.setItemInMainHand(item)
+        text.send(sender, "set-done", tag("level", updated.level.toString()), tag("plus", updated.plus.toString()))
     }
 
     private fun sendElements(sender: CommandSender) {
@@ -206,6 +228,8 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
             "recipes" to null,
             "spells" to null,
             "elements" to null,
+            "tree" to null,
+            "codex" to null,
             "list" to null,
             "stats" to null,
             "give" to "auraforge.give",
@@ -213,6 +237,7 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
             "altar" to "auraforge.give",
             "rune" to "auraforge.give",
             "scroll" to "auraforge.give",
+            "set" to "auraforge.give",
             "reload" to "auraforge.reload",
         )
     }

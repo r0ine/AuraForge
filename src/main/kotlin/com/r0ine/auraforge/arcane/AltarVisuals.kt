@@ -2,8 +2,11 @@ package com.r0ine.auraforge.arcane
 
 import com.r0ine.auraforge.AuraForgePlugin
 import com.r0ine.auraforge.api.SpellElement
+import com.r0ine.auraforge.core.RegionDispatcher
+import kotlinx.coroutines.launch
 import net.kyori.adventure.text.Component
 import org.bukkit.Color
+import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.World
@@ -129,6 +132,51 @@ class AltarVisuals(
         world.spawnParticle(Particle.FLASH, point, 1)
         world.playSound(point, Sound.BLOCK_BEACON_ACTIVATE, 1f, 1.4f)
         world.playSound(point, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 1f, 0.8f)
+    }
+
+    fun enhanceBurst(success: Boolean) {
+        val dispatcher = RegionDispatcher(plugin, world, altar.pos.x shr 4, altar.pos.z shr 4)
+        val top = center.clone().add(0.0, 2.6, 0.0)
+        plugin.scope.launch(dispatcher) {
+            val hammer = world.spawn(top, BlockDisplay::class.java) { d ->
+                d.block = Material.ANVIL.createBlockData()
+                d.isPersistent = false
+                d.brightness = Display.Brightness(15, 15)
+                d.transformation = Transformation(Vector3f(-0.25f, 0f, -0.25f), Quaternionf(), Vector3f(0.5f), Quaternionf())
+            }
+            dispatcher.sleep(2)
+            hammer.interpolationDelay = 0
+            hammer.interpolationDuration = 6
+            hammer.transformation = Transformation(Vector3f(-0.25f, -1.2f, -0.25f), Quaternionf().rotateY(0.6f), Vector3f(0.5f), Quaternionf())
+            dispatcher.sleep(6)
+
+            val hit = center.clone().add(0.0, 1.3, 0.0)
+            world.playSound(hit, Sound.BLOCK_ANVIL_LAND, 0.8f, if (success) 1.3f else 0.6f)
+            val ring = (0 until 8).map { index ->
+                world.spawn(hit, BlockDisplay::class.java) { d ->
+                    d.block = (if (success) Material.GOLD_BLOCK else Material.COAL_BLOCK).createBlockData()
+                    d.isPersistent = false
+                    d.brightness = Display.Brightness(15, 15)
+                    d.transformation = Transformation(Vector3f(-0.06f), Quaternionf(), Vector3f(0.12f), Quaternionf())
+                } to index * PI / 4
+            }
+            dispatcher.sleep(1)
+            ring.forEach { (shard, angle) ->
+                shard.interpolationDelay = 0
+                shard.interpolationDuration = 10
+                val out = Vector3f((cos(angle) * 1.4).toFloat(), if (success) 0.5f else -0.3f, (sin(angle) * 1.4).toFloat())
+                shard.transformation = Transformation(out, Quaternionf().rotateXYZ(1f, angle.toFloat(), 0.5f), Vector3f(0.02f), Quaternionf())
+            }
+            if (success) {
+                world.spawnParticle(Particle.TOTEM_OF_UNDYING, hit, 40, 0.4, 0.4, 0.4, 0.3)
+                world.playSound(hit, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1.6f)
+            } else {
+                world.spawnParticle(Particle.LARGE_SMOKE, hit, 20, 0.3, 0.3, 0.3, 0.02)
+            }
+            dispatcher.sleep(11)
+            hammer.remove()
+            ring.forEach { it.first.remove() }
+        }
     }
 
     fun fail() {

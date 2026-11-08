@@ -4,6 +4,7 @@ import com.r0ine.auraforge.AuraForgePlugin
 import com.r0ine.auraforge.api.AbilityType
 import com.r0ine.auraforge.core.seconds
 import com.r0ine.auraforge.core.tag
+import com.r0ine.auraforge.progress.AbilityBoost
 import org.bukkit.entity.Player
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -27,7 +28,7 @@ class AbilityService(private val plugin: AuraForgePlugin) {
         return (plugin.settings.ability(type).cooldown * 1000 * (1 - reduction)).toLong()
     }
 
-    fun Player.castAbility(type: AbilityType, quality: Int = 50, setPieces: Int = 0): Boolean {
+    fun Player.castAbility(type: AbilityType, quality: Int = 50, setPieces: Int = 0, boost: AbilityBoost = AbilityBoost.NONE): Boolean {
         val now = System.currentTimeMillis()
         if (now - (lastCast[uniqueId] ?: 0L) < 250) return false
 
@@ -39,7 +40,7 @@ class AbilityService(private val plugin: AuraForgePlugin) {
         }
 
         val settings = plugin.settings.ability(type)
-        val factor = powerFactor(quality, setPieces)
+        val factor = powerFactor(quality, setPieces) * boost.power
         when (type) {
             AbilityType.DASH -> {
                 launchForward(settings.power * factor)
@@ -55,7 +56,7 @@ class AbilityService(private val plugin: AuraForgePlugin) {
         }
 
         lastCast[uniqueId] = now
-        cooldowns.computeIfAbsent(uniqueId) { ConcurrentHashMap() }[type] = now + cooldownMillis(type, quality)
+        cooldowns.computeIfAbsent(uniqueId) { ConcurrentHashMap() }[type] = now + (cooldownMillis(type, quality) * boost.cooldown).toLong()
         plugin.text.bar(this, "ability-used", tag("ability", abilityName))
         return true
     }
@@ -66,6 +67,14 @@ class AbilityService(private val plugin: AuraForgePlugin) {
     fun consumeFallGrace(playerId: UUID): Boolean {
         val until = fallGrace.remove(playerId) ?: return false
         return until >= System.currentTimeMillis()
+    }
+
+    fun shorten(playerId: UUID, millis: Long) {
+        cooldowns[playerId]?.replaceAll { _, readyAt -> readyAt - millis }
+    }
+
+    fun resetCooldown(playerId: UUID, type: AbilityType) {
+        cooldowns[playerId]?.remove(type)
     }
 
     fun forget(playerId: UUID) {

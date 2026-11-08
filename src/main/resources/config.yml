@@ -57,6 +57,44 @@ set-bonus:
   min-pieces: 2
   per-piece: 0.06
 
+# Silah gelişimi: dövülmüş silahlar vuruş ve öldürmeyle tecrübe kazanır, her seviye bir ustalık puanı verir.
+progression:
+  max-level: 30
+  # Bir sonraki seviye için gereken XP: xp-base + xp-step * (seviye - 1)
+  xp-base: 60
+  xp-step: 35
+  xp-per-hit: 2
+  # Öldürülen canlının can değeri bu sayıyla çarpılıp XP olarak eklenir
+  xp-per-health: 1.0
+  # Takılı element rune'unun vuruşta tetiklenme şansı (Rezonans bunun üstüne eklenir)
+  element-chance: 0.12
+  # Ustalık ağacını sıfırlamanın bedeli (oyuncu XP seviyesi)
+  reset-levels: 10
+
+# Arıtma: büyü masasındaki "+ Gelişim" menüsünden eşyayı +1 ... +10 yükseltme.
+enhance:
+  max-plus: 10
+  # Her basamağın başarı şansı (yüzde): +0→+1, +1→+2 ...
+  chances: [100, 95, 90, 80, 70, 60, 50, 40, 30, 20]
+  # Bu basamaktan itibaren başarısız deneme eşyayı bir düşürür
+  downgrade-from: 6
+  # Bu seviyeye ulaşan arıtma tüm sunucuya duyurulur
+  broadcast-from: 8
+  damage-per-plus: 0.03
+  power-per-plus: 0.02
+  armor-per-plus: 0.01
+  costs:
+    - { IRON_INGOT: 4 }
+    - { IRON_INGOT: 6 }
+    - { IRON_INGOT: 8, LAPIS_LAZULI: 4 }
+    - { GOLD_INGOT: 6, LAPIS_LAZULI: 8 }
+    - { DIAMOND: 2, AMETHYST_SHARD: 4 }
+    - { DIAMOND: 3, AMETHYST_SHARD: 8 }
+    - { DIAMOND: 4, ECHO_SHARD: 1 }
+    - { NETHERITE_SCRAP: 1, DIAMOND: 4 }
+    - { NETHERITE_SCRAP: 2, ECHO_SHARD: 2 }
+    - { NETHERITE_INGOT: 1, NETHER_STAR: 1 }
+
 autosave-seconds: 30
 
 recipes:
@@ -301,6 +339,9 @@ messages:
     - "<yellow>/af rune <element> [adet] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>rune malzemesi"
     - "<yellow>/af item <tarif> [kalite] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır silah/zırh"
     - "<yellow>/af scroll <büyü> [güç] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır parşömen"
+    - "<yellow>/af tree</yellow> <dark_gray>-</dark_gray> <gray>elindeki silahın ustalık ağacı"
+    - "<yellow>/af codex</yellow> <dark_gray>-</dark_gray> <gray>kodeks: elementler, büyüler, ağaç, arıtma"
+    - "<yellow>/af set <level|plus> <değer></yellow> <dark_gray>-</dark_gray> <gray>elindeki eşyanın seviyesi/arıtması"
     - "<yellow>/af reload</yellow> <dark_gray>-</dark_gray> <gray>ayarları yeniden yükler"
   no-permission: "<prefix> <red>Bunun için yetkin yok."
   player-only: "<prefix> <red>Bu komut yalnızca oyun içinden kullanılabilir."
@@ -498,3 +539,182 @@ messages:
   list-line: " <dark_gray>•</dark_gray> <gold>⚒</gold> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<count> malzeme, <crafts> dövme)"
   list-altar-line: " <dark_gray>•</dark_gray> <light_purple>✧</light_purple> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<combines> üretim)"
   list-empty: "<prefix> <gray>Hiç tezgahın yok."
+
+  # Gelişim: lore satırları
+  lore-level: "<gray>Seviye <white><level></white> <green><bar></green> <dark_gray><xp>/<need> XP"
+  lore-level-max: "<gray>Seviye <gold><level></gold> <gold><bar></gold> <dark_gray>(en üst)"
+  lore-plus: "<gray>Arıtma: <white>+<plus></white> <dark_gray>·</dark_gray> <gray>hasar <white>+%<bonus>"
+  lore-plus-armor: "<gray>Arıtma: <white>+<plus></white> <dark_gray>·</dark_gray> <gray>alınan hasar <white>-%<bonus>"
+  lore-element: "<gray>Element: <element>"
+  lore-points: "<yellow>✦ <points> ustalık puanı harcanmayı bekliyor"
+  lore-talents: "<gray>Ustalıklar:"
+
+  level-up: "<prefix> <item> <gray>seviye <gold><level></gold> oldu! <dark_gray>(<white><points></white> boş puan)"
+  talent-learned: "<green>✦ <white><talent></white> öğrenildi"
+  talent-reset: "<yellow>Ustalık ağacı sıfırlandı, puanlar geri verildi."
+  talent-reset-cost: "<red>Sıfırlamak için <white><levels></white> XP seviyesi gerekiyor."
+  socket-done: "<light_purple>Element yuvasına <element> <light_purple>işlendi."
+  socket-same: "<yellow>Bu element zaten takılı."
+  proc-echo: "<aqua>Yankı! <gray>Bekleme süresi sıfırlandı."
+  proc-evade: "<aqua>Sıyrıldın!"
+  proc-overload: "<gold>Aşırı Yük: <element> <gold>patlaması!"
+  proc-avatar: "<light_purple>Element Avatarı uyandı: <name>"
+
+  enhance-success: "<green>Arıtma başarılı! <item>"
+  enhance-failed: "<red>Arıtma tutmadı. <gray>Malzemeler gitti, eşya yerinde."
+  enhance-downgraded: "<red>Arıtma çöktü! <gray>Eşya bir basamak düştü."
+  enhance-maxed: "<gold>Bu eşya zaten en üst arıtmada."
+  enhance-no-materials: "<red>Malzemelerin yetmiyor."
+  enhance-broadcast: "<prefix> <gold><player></gold> <gray>arıtmada şansını zorladı:</gray> <item>"
+  enhance-free: "<gray>  · bedava"
+  enhance-cost-line: "<gray>  · <white><amount>x</white> <material>"
+
+  menu-back: "<yellow>← Geri"
+  menu-close: "<red>Kapat"
+  altar-progress: "<gold><bold>+ Gelişim</bold>"
+  altar-progress-lore:
+    - "<gray>Elindeki dövülmüş eşyayı arıt,"
+    - "<gray>element yuvasına rune işle,"
+    - "<gray>ustalık ağacını aç."
+
+  hub-title: "<dark_gray>Gelişim"
+  hub-empty: "<red>Elinde dövülmüş eşya yok"
+  hub-empty-lore:
+    - "<gray>Tezgahta dövdüğün bir silahı ya da"
+    - "<gray>zırhı eline alıp menüyü yeniden aç."
+  hub-no-weapon: "<red>Elinde dövülmüş bir silah olmalı."
+  hub-enhance: "<gold>Arıt: <from> <gray>→</gray> <to>"
+  hub-enhance-max: "<gold>Arıtma tamam: <plus>"
+  hub-enhance-chance: "<gray>Başarı şansı: <white>%<chance>"
+  hub-enhance-cost: "<gray>Bedel:"
+  hub-enhance-risk: "<red>⚠ Başarısız olursa bir basamak düşer"
+  hub-enhance-click: "<yellow>Tıkla ve örsü indir"
+  hub-enhance-need-altar: "<red>Arıtma için büyü masasından açmalısın."
+  hub-socket-empty: "<light_purple>Element Yuvası <dark_gray>(boş)"
+  hub-socket: "<light_purple>Element Yuvası: <element>"
+  hub-socket-lore:
+    - "<gray>Envanterden bir rune'a <white>shift+tık</white> yap,"
+    - "<gray>rune silaha işlenir. Vuruşlarda element"
+    - "<gray>tetiklenir; eski element silinir."
+  hub-socket-armor: "<gray>Element Yuvası"
+  hub-socket-armor-lore:
+    - "<dark_gray>Zırhlarda element yuvası yok."
+  hub-tree: "<green>Ustalık Ağacı"
+  hub-tree-lore:
+    - "<gray>Seviye: <white><level>"
+    - "<gray>Boş puan: <yellow><points>"
+    - ""
+    - "<yellow>Tıkla ve aç"
+  hub-tree-armor: "<gray>Ustalık Ağacı"
+  hub-tree-armor-lore:
+    - "<dark_gray>Zırhlar yalnızca arıtılır."
+  hub-codex: "<aqua>Kodeks"
+  hub-codex-lore:
+    - "<gray>Elementler, büyüler, tarifler,"
+    - "<gray>ustalık ağacı ve arıtma tablosu."
+
+  tree-title: "<dark_gray>Ustalık Ağacı"
+  tree-fork: "<gray>⟡ Yol ayrımı: birini seç"
+  tree-row: "<dark_gray><branch> · <row>. basamak"
+  tree-now: "<gray>Şu an: <white><effect>"
+  tree-next: "<gray>Sonraki: <green><effect>"
+  tree-choice: "<dark_gray>Seçilirse <white><rival></white> kapanır"
+  tree-learn: "<yellow>Tıkla: 1 puan harca"
+  tree-maxed: "<gold>Tamamlandı"
+  tree-locked-rival: "<red>Kilitli: karşı yol seçildi"
+  tree-locked-parent: "<red>Kilitli: önce üst basamağı aç"
+  tree-locked-depth: "<red>Kilitli: bu dalda <white><need></white> puan gerekir"
+  tree-locked-points: "<red>Boş puan yok"
+  tree-bar-maxed: "<gold>Bu ustalık zaten tam."
+  tree-bar-rival: "<red>Bu yolun karşısını seçtin."
+  tree-bar-parent: "<red>Önce üstteki basamağı aç."
+  tree-bar-depth: "<red>Bu dalda daha fazla puan harcamalısın."
+  tree-bar-points: "<red>Boş ustalık puanın yok."
+  tree-branch-lore:
+    - "<gray>Harcanan: <white><spent>"
+  tree-info: "<gold>Seviye <level>"
+  tree-info-lore:
+    - "<gray>Boş puan: <yellow><points>"
+    - "<gray>Harcanan: <white><spent>"
+    - ""
+    - "<dark_gray>Her seviye 1 puan verir. Silahla vur,"
+    - "<dark_gray>öldür, seviye atla."
+  tree-reset: "<red>Ağacı Sıfırla"
+  tree-reset-lore:
+    - "<gray>Bütün puanlar geri döner."
+    - "<gray>Bedel: <white><levels></white> XP seviyesi"
+
+  codex-title-main: "<dark_gray>Kodeks"
+  codex-title-elements: "<dark_gray>Kodeks › Elementler"
+  codex-title-spells: "<dark_gray>Kodeks › Büyüler"
+  codex-title-recipes: "<dark_gray>Kodeks › Dövme Tarifleri"
+  codex-title-abilities: "<dark_gray>Kodeks › Yetenekler"
+  codex-title-talents: "<dark_gray>Kodeks › Ustalık Ağacı"
+  codex-title-enhance: "<dark_gray>Kodeks › Arıtma"
+  codex-elements: "<gold>Elementler"
+  codex-elements-lore:
+    - "<gray>Beş element, rune'ları ve"
+    - "<gray>silaha işlenince yaptıkları."
+  codex-spells: "<light_purple>Büyüler"
+  codex-spells-lore:
+    - "<gray>İki rune'dan doğan 12 büyü."
+  codex-recipes: "<yellow>Dövme Tarifleri"
+  codex-recipes-lore:
+    - "<gray>Tezgahta dövülebilen eşyalar."
+  codex-abilities: "<aqua>Yetenekler"
+  codex-abilities-lore:
+    - "<gray>Silah ve zırhların sağ tık /"
+    - "<gray>eğil+zıpla yetenekleri."
+  codex-talents: "<green>Ustalık Ağacı"
+  codex-talents-lore:
+    - "<gray>Üç dal, iki yol ayrımı,"
+    - "<gray>her dalın sonunda bir zirve."
+  codex-enhance: "<gold>Arıtma (+)"
+  codex-enhance-lore:
+    - "<gray>+1'den +10'a şans ve bedel tablosu."
+  codex-guide: "<white>Nasıl gelişir?"
+  codex-guide-lore:
+    - "<gray>1. Tezgahta silah döv."
+    - "<gray>2. Vurdukça ve öldürdükçe silah XP alır."
+    - "<gray>3. Her seviye 1 ustalık puanı verir."
+    - "<gray>4. Büyü masası › <gold>+ Gelişim</gold> menüsünden"
+    - "<gray>   puanları ağaca harca, rune işle, arıt."
+    - "<gray>5. Yol ayrımlarında yalnızca biri seçilir."
+  codex-element-name: "<element>"
+  codex-element-lore:
+    - "<gray>Rune: <white><rune>"
+    - "<gray>Silaha işlenince: <white><proc>"
+    - "<gray>Büyüleri: <spells>"
+  codex-proc-fire: "hedefi tutuşturur, +1 hasar"
+  codex-proc-wind: "hedefi havaya savurur"
+  codex-proc-ice: "yavaşlatır ve dondurur, +1 hasar"
+  codex-proc-thunder: "yıldırım düşürür, +2,5 hasar"
+  codex-proc-earth: "sarsar ve yavaşlatır, +1,8 hasar"
+  codex-spell-elements: "<gray>Elementler: <elements>"
+  codex-spell-stats: "<dark_gray>Bekleme <cooldown> sn · alan <radius> blok"
+  codex-recipe-ingredients: "<gray>Malzemeler:"
+  codex-ability-cooldown: "<dark_gray>Temel bekleme: <cooldown> sn"
+  codex-ability-dash:
+    - "<gray>Baktığın yöne savrulursun,"
+    - "<gray>kısa süre düşme hasarı almazsın."
+  codex-ability-leap:
+    - "<gray>Yukarı ve ileri fırlarsın."
+  codex-ability-shockwave:
+    - "<gray>Çevredekilere hasar verip iter."
+  codex-ability-guard:
+    - "<gray>Direnç ve emilim kazanırsın."
+  codex-ability-wave:
+    - "<gray>Cam halka dışa açılır,"
+    - "<gray>yakalananlar havaya uçar."
+  codex-talent-max: "<gray>Tamamında: <white><effect></white> <dark_gray>(<max> basamak)"
+  codex-talent-need: "<dark_gray>Bu dalda önce <need> puan gerekir"
+  codex-enhance-step: "<gray>Arıtma <from> <gray>→</gray> <to>"
+  codex-enhance-info: "<gold>Arıtma ne verir?"
+  codex-enhance-info-lore:
+    - "<gray>Silah: her + için <white>%<damage></white> vuruş hasarı"
+    - "<gray>Tüm eşyalar: her + için <white>%<power></white> yetenek gücü"
+    - "<gray>Zırh: her + için <white>%<armor></white> hasar azaltma"
+    - "<dark_gray>+7 ve üstü eşyalar parlar."
+
+  set-usage: "<prefix> <gray>Kullanım: <white>/af set <level|plus> <değer>"
+  set-done: "<prefix> <gray>Elindeki eşya: seviye <white><level></white>, arıtma <white>+<plus>"

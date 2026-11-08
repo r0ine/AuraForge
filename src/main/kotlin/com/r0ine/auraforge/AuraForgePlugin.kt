@@ -22,6 +22,9 @@ import com.r0ine.auraforge.forge.ForgeCore
 import com.r0ine.auraforge.forge.ForgeListener
 import com.r0ine.auraforge.forge.ForgeManager
 import com.r0ine.auraforge.menu.ForgeMenus
+import com.r0ine.auraforge.progress.ProgressListener
+import com.r0ine.auraforge.progress.ProgressMenus
+import com.r0ine.auraforge.progress.ProgressService
 import com.r0ine.auraforge.spell.SpellEffects
 import com.r0ine.auraforge.spell.SpellItems
 import com.r0ine.auraforge.spell.SpellListener
@@ -80,6 +83,10 @@ class AuraForgePlugin : JavaPlugin() {
         private set
     lateinit var altarMenus: AltarMenus
         private set
+    lateinit var progress: ProgressService
+        private set
+    lateinit var progressMenus: ProgressMenus
+        private set
 
     private lateinit var storage: Storage
     private val dirty = AtomicBoolean(false)
@@ -98,6 +105,7 @@ class AuraForgePlugin : JavaPlugin() {
         spells = SpellService(this)
         if (!reloadSettings()) logger.warning("Varsayılan ayarlarla devam ediliyor.")
 
+        progress = ProgressService(this)
         forges = ForgeManager(this)
         core = ForgeCore(this)
         items = AbilityItems(this)
@@ -107,6 +115,7 @@ class AuraForgePlugin : JavaPlugin() {
         menus = ForgeMenus(this)
         altars = AltarManager(this)
         altarMenus = AltarMenus(this)
+        progressMenus = ProgressMenus(this)
 
         storage = Storage(File(dataFolder, "data.json"), logger)
         val saved = storage.load()
@@ -125,6 +134,8 @@ class AuraForgePlugin : JavaPlugin() {
             AltarListener(this),
             altarMenus,
             SpellListener(this),
+            ProgressListener(this),
+            progressMenus,
         ).forEach { server.pluginManager.registerEvents(it, this) }
 
         getCommand("auraforge")?.let { command ->

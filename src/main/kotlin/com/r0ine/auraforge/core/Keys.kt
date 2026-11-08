@@ -23,6 +23,11 @@ class Keys(plugin: Plugin) {
     val rune = NamespacedKey(plugin, "rune")
     val spell = NamespacedKey(plugin, "spell")
     val scrollPower = NamespacedKey(plugin, "scroll_power")
+    val level = NamespacedKey(plugin, "level")
+    val xp = NamespacedKey(plugin, "xp")
+    val plus = NamespacedKey(plugin, "plus")
+    val socket = NamespacedKey(plugin, "socket")
+    val talents = NamespacedKey(plugin, "talents")
 }
 
 private val ARMOR_SLOTS = setOf(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)

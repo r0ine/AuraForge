@@ -1,6 +1,6 @@
 # AuraForge
 
-Paper ve Folia için Kotlin ile yazılmış bir dövme tezgahı + büyü masası eklentisi. Oyuncu dünyaya bir
+Paper ve Folia için Kotlin ile yazılmış bir dövme tezgahı + büyü masası + silah gelişimi eklentisi. Oyuncu dünyaya bir
 tezgah kurar, malzemeleri üstüne koyar, malzemeler tezgahın üstünde dönmeye başlar. Dövme sırasında
 ekranda kayan bir imleç çıkar; doğru anda vuran oyuncu daha kaliteli bir eşya alır. Çıkan silah ve
 zırhların sağ tık ya da eğilip zıplamayla tetiklenen yetenekleri vardır. İkinci bir masa daha var:
@@ -67,6 +67,37 @@ tıklayınca bir büyü masası oluşturur. Masaya sağ tıklayarak iki yuvalı 
 Her parşömen 1-10 arası bir **güç** değeriyle çıkar; güç yüksekse büyünün alanı, menzili ve süresi
 artar, bekleme süresi düşer. Aynı iki rune kullanılırsa güç biraz daha yüksek başlar.
 
+## Gelişim: seviye, ustalık ağacı, arıtma
+
+Dövülen silahlar kullanıldıkça büyür. Vuruşlar ve öldürmeler silaha XP kazandırır (öldürülen canlının
+canı kadar), her seviye bir **ustalık puanı** verir; sınır 30. seviye. Seviye atlayınca silah oyuncunun
+başının üstünde dönerek yükselir.
+
+Büyü masasının menüsünde **+ Gelişim** düğmesi var. Elindeki dövülmüş eşyayla açınca:
+
+- **Arıtma (+)**: eşyayı +1'den +10'a çıkarır. Her basamağın şansı ve bedeli ayrı (demirden başlayıp
+  netherite külçesine kadar). +6'dan sonra başarısız deneme eşyayı bir basamak düşürür, +8 ve üstü
+  sunucuya duyurulur. Masanın üstüne bir örs iner; başarıda altın, başarısızlıkta kömür kıymıkları saçılır.
+  Silahta her + hasarı, her eşyada yetenek gücünü, zırhta alınan hasarı azaltmayı artırır.
+- **Element yuvası**: envanterden bir rune'a shift+tık yapınca rune silaha işlenir. Vuruşlarda element
+  tetiklenir: ateş tutuşturur, rüzgâr savurur, buz dondurur, şimşek yıldırım düşürür, toprak sarsar.
+- **Ustalık ağacı**: üç dal, her dalda beş basamak. 2. ve 4. basamaklar yol ayrımıdır, ikisinden biri
+  seçilince diğeri kapanır. Alt basamaklar için önce üsttekini açmak ve o dalda yeterli puan harcamak
+  gerekir. Sıfırlamak 10 XP seviyesine mal olur.
+
+| Dal | Basamaklar |
+|---|---|
+| Güç Yolu | Keskin Ağız → Ağır Darbe / Kanatma → İnfaz → Kritik Vuruş / Can Emme → **Öfke** |
+| Rüzgâr Yolu | Tempo → Av Coşkusu / Dalga Gücü → Yankı → Sıyrılma / Kinetik → **Fırtına Adımı** |
+| Element Yolu | Rezonans → Yoğunluk / Element Zırhı → Seken Element → Aşırı Yük / Element Emme → **Element Avatarı** |
+
+Element Avatarı her 12. element tetiklemesinde silahın elementinin çift büyüsünü (ateş → Cehennem Alanı,
+şimşek → Fırtına Zinciri...) kendiliğinden patlatır.
+
+**Kodeks** (`/af codex`, ya da masadaki kitap) oyun içi wiki'dir: elementler, 12 büyü, dövme tarifleri,
+yetenekler, ağacın bütün düğümleri ve arıtma tablosu sayfa sayfa gezilir. Zırhlar yalnızca arıtılır,
+seviye ve ağaç silahlara özeldir.
+
 ### Block display animasyonları
 
 Büyülerin görsel kısmı Minecraft 1.21 block display varlıklarıyla yapılır: her tick transformasyon
@@ -83,6 +114,9 @@ yüklenince yönetici geri kurar.
 | `/af spells` | `auraforge.use` | Büyü kombinasyonlarını listeler |
 | `/af elements` | `auraforge.use` | Elementleri ve rune malzemelerini listeler |
 | `/af list` | `auraforge.use` | Tezgahlarının ve masalarının konumu |
+| `/af tree` | `auraforge.use` | Elindeki silahın ustalık ağacı |
+| `/af codex` | `auraforge.use` | Kodeks (oyun içi wiki) |
+| `/af set <level\|plus> <değer>` | `auraforge.give` | Elindeki eşyanın seviyesini ya da arıtmasını ayarlar |
 | `/af stats [oyuncu]` | `auraforge.use` | Dövme istatistikleri |
 | `/af give [oyuncu] [adet]` | `auraforge.give` | Forge Çekirdeği verir |
 | `/af altar [oyuncu] [adet]` | `auraforge.give` | Büyü Çekirdeği verir |
@@ -99,7 +133,7 @@ claim eklentilerinin yasakladığı yere tezgah kurulamaz.
 
 Her şey `plugins/AuraForge/config.yml` içinde: tezgah bloğu, malzeme sınırı, animasyon aralığı, dövme
 zorluğu (tur sayısı, imleç hızı, bölge genişlikleri), kalite çarpanları, yetenek değerleri, set bonusu,
-tarifler ve tüm mesajlar (MiniMessage). Yeni tarif eklemek için:
+silah seviyesi (`progression`), arıtma şans ve bedelleri (`enhance`), tarifler ve tüm mesajlar (MiniMessage). Yeni tarif eklemek için:
 
 ```yaml
 recipes:

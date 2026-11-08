@@ -81,6 +81,8 @@ class AltarMenus(private val plugin: AuraForgePlugin) : Listener {
         })
         inventory.setItem(CANCEL, icon(Material.HOPPER, text.item("altar-return")))
         inventory.setItem(RECIPES, icon(Material.KNOWLEDGE_BOOK, text.item("altar-recipes"), text.lines("altar-recipes-lore")))
+        inventory.setItem(CODEX, icon(Material.WRITABLE_BOOK, text.item("hub-codex"), text.lines("hub-codex-lore")))
+        inventory.setItem(PROGRESS, icon(Material.NETHER_STAR, text.item("altar-progress"), text.lines("altar-progress-lore")))
         inventory.setItem(DISMANTLE, icon(Material.ENCHANTING_TABLE, text.item("altar-dismantle"), text.lines("altar-dismantle-lore")))
 
         plugin.altars.refresh(altar, a, b, spell)
@@ -143,6 +145,14 @@ class AltarMenus(private val plugin: AuraForgePlugin) : Listener {
                 event.isCancelled = true
                 player.closeInventory()
                 plugin.sendSpells(player)
+            }
+            PROGRESS -> {
+                event.isCancelled = true
+                plugin.progressMenus.openHub(player, altar.id)
+            }
+            CODEX -> {
+                event.isCancelled = true
+                plugin.progressMenus.openCodex(player, altar.id)
             }
             DISMANTLE -> {
                 event.isCancelled = true
@@ -249,6 +259,8 @@ class AltarMenus(private val plugin: AuraForgePlugin) : Listener {
         const val COMBINE = 22
         const val CANCEL = 18
         const val RECIPES = 19
+        const val CODEX = 20
+        const val PROGRESS = 24
         const val DISMANTLE = 26
     }
 }

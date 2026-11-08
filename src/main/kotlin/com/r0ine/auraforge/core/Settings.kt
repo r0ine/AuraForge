@@ -24,6 +24,8 @@ data class Settings(
     val quality: QualitySettings = QualitySettings(),
     val abilities: Map<AbilityType, AbilitySettings> = emptyMap(),
     @SerialName("set-bonus") val setBonus: SetBonusSettings = SetBonusSettings(),
+    val progression: ProgressionSettings = ProgressionSettings(),
+    val enhance: EnhanceSettings = EnhanceSettings(),
     @SerialName("autosave-seconds") val autosaveSeconds: Int = 30,
     val recipes: Map<String, JsonElement> = emptyMap(),
     val spells: Map<String, JsonElement> = emptyMap(),
@@ -56,6 +58,14 @@ data class Settings(
             ),
             setBonus = setBonus.copy(minPieces = setBonus.minPieces.coerceIn(1, 4)),
             autosaveSeconds = autosaveSeconds.coerceIn(10, 3600),
+            progression = progression.copy(
+                maxLevel = progression.maxLevel.coerceIn(2, 100),
+                xpBase = progression.xpBase.coerceAtLeast(1),
+                xpStep = progression.xpStep.coerceAtLeast(0),
+                elementChance = progression.elementChance.coerceIn(0.0, 1.0),
+                resetLevels = progression.resetLevels.coerceAtLeast(0),
+            ),
+            enhance = enhance.copy(maxPlus = enhance.maxPlus.coerceIn(1, 20)),
             arcane = arcane.copy(
                 maxPerPlayer = arcane.maxPerPlayer.coerceAtLeast(0),
                 animationInterval = arcane.animationInterval.coerceIn(1, 10),
@@ -124,6 +134,38 @@ data class AbilitySettings(
 )
 
 @Serializable
+data class ProgressionSettings(
+    @SerialName("max-level") val maxLevel: Int = 30,
+    @SerialName("xp-base") val xpBase: Int = 60,
+    @SerialName("xp-step") val xpStep: Int = 35,
+    @SerialName("xp-per-hit") val xpPerHit: Int = 2,
+    @SerialName("xp-per-health") val xpPerHealth: Double = 1.0,
+    @SerialName("element-chance") val elementChance: Double = 0.12,
+    @SerialName("reset-levels") val resetLevels: Int = 10,
+)
+
+@Serializable
+data class EnhanceSettings(
+    @SerialName("max-plus") val maxPlus: Int = 10,
+    val chances: List<Int> = listOf(100, 95, 90, 80, 70, 60, 50, 40, 30, 20),
+    @SerialName("downgrade-from") val downgradeFrom: Int = 6,
+    @SerialName("broadcast-from") val broadcastFrom: Int = 8,
+    @SerialName("damage-per-plus") val damagePerPlus: Double = 0.03,
+    @SerialName("power-per-plus") val powerPerPlus: Double = 0.02,
+    @SerialName("armor-per-plus") val armorPerPlus: Double = 0.01,
+    val costs: List<Map<String, Int>> = emptyList(),
+) {
+    fun chance(plus: Int): Int = chances.getOrElse(plus) { chances.lastOrNull() ?: 50 }.coerceIn(1, 100)
+
+    fun cost(plus: Int): Map<Material, Int> {
+        val raw = costs.getOrElse(plus) { costs.lastOrNull().orEmpty() }
+        return raw.mapNotNull { (name, amount) ->
+            Material.matchMaterial(name)?.takeIf { it.isItem && amount > 0 }?.let { it to amount }
+        }.toMap()
+    }
+}
+
+@Serializable
 data class SetBonusSettings(
     @SerialName("min-pieces") val minPieces: Int = 2,
     @SerialName("per-piece") val perPiece: Double = 0.06,
@@ -153,6 +195,8 @@ object SettingsLoader {
             abilities = defaults.abilities + loaded.abilities,
             recipes = if (user.contains("recipes")) loaded.recipes else defaults.recipes,
             spells = if (user.contains("spells")) loaded.spells else defaults.spells,
+            progression = if (user.contains("progression")) loaded.progression else defaults.progression,
+            enhance = if (user.contains("enhance")) loaded.enhance else defaults.enhance,
             messages = defaults.messages + loaded.messages,
         ).normalized()
     }
