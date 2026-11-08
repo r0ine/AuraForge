@@ -1,0 +1,257 @@
+# AuraForge ayarları. Değişiklikler /auraforge reload ile uygulanır
+# (forge.core-recipe hariç, o yeniden başlatma ister).
+
+forge:
+  # Tezgahı kurmak için kullanılan eşya
+  core-item: NETHER_STAR
+  # Forge Çekirdeği çalışma masasında üretilebilsin mi
+  core-recipe: true
+  # Tezgahın görünen bloğu
+  block: SMITHING_TABLE
+  # Tezgaha aynı anda konabilecek malzeme sayısı (en fazla 7)
+  max-items: 6
+  # Oyuncu başına tezgah sınırı, 0 = sınırsız. auraforge.admin sınıra takılmaz.
+  max-per-player: 3
+  hologram-height: 2.1
+  # Süzülen eşyaların kaç tickte bir güncelleneceği
+  animation-interval: 2
+  # Bu yarıçapta oyuncu yoksa animasyon durur
+  view-distance: 32.0
+
+crafting:
+  rounds: 3
+  # İmlecin barı baştan sona geçme süresi; her turda speed-up ile çarpılır
+  sweep-ms: 1600
+  speed-up: 0.8
+  # Yeşil bölgenin ve altın bölgenin bar üzerindeki genişliği (0-1 arası)
+  zone-width: 0.2
+  perfect-width: 0.06
+  bar-length: 32
+  pause-ticks: 14
+
+quality:
+  # Kalite 0 ve 100'deki yetenek gücü çarpanı
+  power-min: 0.8
+  power-max: 1.35
+  # Kalite 100'de bekleme süresinden düşülen oran
+  cooldown-reduction: 0.3
+
+# cooldown saniye, duration tick cinsinden
+abilities:
+  dash:
+    cooldown: 3.0
+    power: 1.5
+  leap:
+    cooldown: 7.0
+    power: 1.1
+  shockwave:
+    cooldown: 10.0
+    radius: 4.5
+    damage: 5.0
+  guard:
+    cooldown: 16.0
+    duration: 100
+    amplifier: 1
+
+# Aynı yeteneği taşıyan zırh parçası sayısı min-pieces'e ulaşınca
+# parça başına per-piece kadar güç eklenir.
+set-bonus:
+  min-pieces: 2
+  per-piece: 0.06
+
+autosave-seconds: 30
+
+# Malzemeler tezgahtakilerle birebir eşleşmeli. Toplam adet max-items'ı geçemez.
+recipes:
+  ruzgar-kilici:
+    ability: dash
+    result: IRON_SWORD
+    name: "<gradient:#9BE7FF:#3A8DFF>Rüzgâr Kılıcı</gradient>"
+    description: "<gray>Sahibini rüzgârla ileri savurur."
+    ingredients:
+      FEATHER: 3
+      IRON_INGOT: 2
+      STICK: 1
+  firtina-tozlugu:
+    ability: dash
+    result: IRON_LEGGINGS
+    name: "<gradient:#9BE7FF:#3A8DFF>Fırtına Tozluğu</gradient>"
+    ingredients:
+      FEATHER: 2
+      IRON_INGOT: 3
+      SUGAR: 1
+  sicrayan-cizme:
+    ability: leap
+    result: IRON_BOOTS
+    name: "<gradient:#B6FF8A:#2FBF71>Sıçrayan Çizme</gradient>"
+    description: "<gray>Düşüşün acısını rüzgâra bırakır."
+    ingredients:
+      SLIME_BALL: 2
+      IRON_INGOT: 2
+      RABBIT_FOOT: 1
+  gok-cekici:
+    ability: leap
+    result: MACE
+    name: "<gradient:#B6FF8A:#2FBF71>Gök Çekici</gradient>"
+    ingredients:
+      BREEZE_ROD: 2
+      IRON_BLOCK: 1
+      STICK: 1
+  deprem-baltasi:
+    ability: shockwave
+    result: DIAMOND_AXE
+    name: "<gradient:#FFB347:#FF5E62>Deprem Baltası</gradient>"
+    description: "<gray>Yere vurduğunda çevresini savurur."
+    ingredients:
+      DIAMOND: 2
+      TNT: 1
+      GUNPOWDER: 2
+      STICK: 1
+  sarsinti-migferi:
+    ability: shockwave
+    result: DIAMOND_HELMET
+    name: "<gradient:#FFB347:#FF5E62>Sarsıntı Miğferi</gradient>"
+    ingredients:
+      DIAMOND: 3
+      TNT: 1
+      OBSIDIAN: 1
+  kale-gogusluk:
+    ability: guard
+    result: IRON_CHESTPLATE
+    name: "<gradient:#E0C3FC:#8EC5FC>Kale Göğüslüğü</gradient>"
+    ingredients:
+      IRON_INGOT: 4
+      OBSIDIAN: 1
+      AMETHYST_SHARD: 1
+  kale-migferi:
+    ability: guard
+    result: IRON_HELMET
+    name: "<gradient:#E0C3FC:#8EC5FC>Kale Miğferi</gradient>"
+    ingredients:
+      IRON_INGOT: 3
+      OBSIDIAN: 1
+      AMETHYST_SHARD: 1
+  bekci-kalkani:
+    ability: guard
+    result: SHIELD
+    name: "<gradient:#E0C3FC:#8EC5FC>Bekçi Kalkanı</gradient>"
+    ingredients:
+      IRON_INGOT: 1
+      OAK_PLANKS: 3
+      OBSIDIAN: 1
+      AMETHYST_SHARD: 1
+
+messages:
+  prefix: "<gradient:#FFB347:#FF5E62><bold>AuraForge</bold></gradient> <dark_gray>»</dark_gray>"
+  help:
+    - "<prefix> <gray>Komutlar:"
+    - "<yellow>/af recipes</yellow> <dark_gray>-</dark_gray> <gray>tarifleri listeler"
+    - "<yellow>/af list</yellow> <dark_gray>-</dark_gray> <gray>tezgahlarını gösterir"
+    - "<yellow>/af stats [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>demirci istatistikleri"
+    - "<yellow>/af give [oyuncu] [adet]</yellow> <dark_gray>-</dark_gray> <gray>Forge Çekirdeği verir"
+    - "<yellow>/af item <tarif> [kalite] [oyuncu]</yellow> <dark_gray>-</dark_gray> <gray>hazır eşya verir"
+    - "<yellow>/af reload</yellow> <dark_gray>-</dark_gray> <gray>ayarları yeniden yükler"
+  no-permission: "<prefix> <red>Bunun için yetkin yok."
+  player-only: "<prefix> <red>Bu komut yalnızca oyun içinden kullanılabilir."
+  player-not-found: "<prefix> <red>Oyuncu bulunamadı."
+  unknown-recipe: "<prefix> <red>Böyle bir tarif yok. <gray>/af recipes</gray> ile bakabilirsin."
+  reloaded: "<prefix> <green>Ayarlar yeniden yüklendi, <white><count></white> tarif aktif."
+  reload-failed: "<prefix> <red>config.yml okunamadı, eski ayarlar korunuyor. Ayrıntı konsolda."
+  give-core: "<prefix> <white><player></white> <gray>oyuncusuna <white><amount></white> Forge Çekirdeği verildi."
+  give-item: "<prefix> <white><player></white> <gray>oyuncusuna</gray> <item> <gray>verildi."
+
+  core-name: "<gradient:#FFB347:#FF5E62><bold>Forge Çekirdeği</bold></gradient>"
+  core-lore:
+    - "<gray>Bir bloğa sağ tıklayarak"
+    - "<gray>AuraForge tezgahı kurarsın."
+
+  forge-placed: "<green>Tezgah kuruldu. <gray>Elindeki eşyayla sağ tıklayıp malzeme koy."
+  forge-blocked: "<red>Tezgah buraya sığmıyor."
+  forge-protected: "<red>Burada inşa etme iznin yok."
+  forge-limit: "<red>En fazla <white><max></white> tezgahın olabilir."
+  forge-not-yours: "<red>Bu tezgah <white><owner></white> oyuncusuna ait."
+  forge-busy: "<yellow>Tezgahta şu an dövme yapılıyor."
+  forge-full: "<red>Tezgah dolu <gray>(<max>/<max>)</gray>."
+  forge-empty: "<gray>Tezgahta malzeme yok."
+  forge-rejected: "<red>Bu eşya tezgaha konamaz."
+  forge-item-added: "<item> <gray>tezgaha kondu <dark_gray>(<count>/<max>)"
+  forge-item-taken: "<item> <gray>geri alındı."
+  forge-dismantled: "<yellow>Tezgah toplandı, malzemeler ve çekirdek envanterine eklendi."
+
+  hologram: "<gradient:#FFB347:#FF5E62><bold>AuraForge</bold></gradient><newline><gray>Usta: <white><owner></white><newline><gray>Malzeme: <white><count>/<max></white><newline><status>"
+  hologram-empty: "<dark_gray>Malzeme bekleniyor"
+  hologram-unknown: "<red>Tarif eşleşmiyor"
+  hologram-ready: "<green>Hazır:</green> <recipe>"
+  hologram-crafting: "<gold>⚒ <white><player></white> dövüyor"
+
+  menu-title: "<dark_gray>AuraForge Tezgahı"
+  menu-slot-empty: "<gray>Boş yuva"
+  menu-slot-empty-lore:
+    - "<dark_gray>Envanterinden shift+tık ile"
+    - "<dark_gray>malzeme koyabilirsin."
+  menu-slot-taken-lore:
+    - "<yellow>Tıkla: geri al"
+  menu-recipes: "<aqua>Tarif Kitabı"
+  menu-recipes-lore:
+    - "<gray>Tüm tarifleri sohbette gösterir."
+  menu-take-all: "<yellow>Hepsini Geri Al"
+  menu-craft: "<green>Dövmeye Başla: <recipe>"
+  menu-craft-lore:
+    - "<gray>Yetenek: <white><ability>"
+    - ""
+    - "<gray>İmleç yeşil bölgeye geldiğinde"
+    - "<gray><white>eğil</white> ya da tezgaha <white>sağ tıkla</white>."
+    - "<gold>Altın</gold> <gray>bölge kusursuz vuruştur."
+  menu-craft-none: "<red>Tarif eşleşmiyor"
+  menu-craft-none-lore:
+    - "<gray>Tezgahtaki malzemeler hiçbir"
+    - "<gray>tarifle birebir eşleşmiyor."
+  menu-dismantle: "<red>Tezgahı Topla"
+  menu-dismantle-lore:
+    - "<gray>Malzemeler ve Forge Çekirdeği"
+    - "<gray>envanterine geri döner."
+
+  recipes-header: "<prefix> <gray>Tarifler:"
+  recipes-empty: "<prefix> <gray>Hiç tarif tanımlanmamış."
+  recipe-line: " <dark_gray>•</dark_gray> <name> <dark_gray>(<ability>)</dark_gray><newline>   <gray><ingredients>"
+
+  crafting-start: "<gray>Dövme başlıyor: <recipe>"
+  crafting-bar: "<gold>⚒ <round>/<rounds></gold>  <bar>"
+  crafting-already: "<red>Zaten bir dövme sürüyor."
+  crafting-no-recipe: "<red>Tezgahtaki malzemeler bir tarifle eşleşmiyor."
+  crafting-walked-away: "<red>Tezgahtan uzaklaştın, dövme yarıda kaldı. Malzemeler yerinde."
+  crafting-cancelled: "<red>Dövme iptal edildi."
+  crafting-recipe-changed: "<red>Malzemeler değişmiş, dövme tamamlanamadı."
+  crafting-done: "<prefix> <item> <gray>dövüldü. Kalite: <white><quality></white> <tier>"
+  hit-perfect: "<gold><bold>KUSURSUZ!</bold>"
+  hit-good: "<green>İyi vuruş"
+  hit-near: "<yellow>Kıl payı"
+  hit-miss: "<red>Iska"
+  title-legendary: "<gradient:#FFD700:#FF8C00><bold>EFSANEVİ</bold></gradient>"
+  subtitle-legendary: "<item>"
+
+  tier-cracked: "<gray>Çatlak"
+  tier-sturdy: "<white>Sağlam"
+  tier-fine: "<aqua>Usta İşi"
+  tier-legendary: "<gold>Efsanevi"
+
+  ability-dash: "Atılma"
+  ability-leap: "Sıçrayış"
+  ability-shockwave: "Şok Dalgası"
+  ability-guard: "Muhafız"
+  ability-used: "<green><ability></green> <gray>kullanıldı."
+  ability-cooldown: "<red><ability></red> <gray>hazır değil: <yellow><seconds> sn"
+
+  item-name: "<name> <dark_gray>[<tier><dark_gray>]"
+  lore-ability: "<gray>Yetenek: <white><ability>"
+  lore-quality: "<gray>Kalite: <white><quality></white> <dark_gray>·</dark_gray> <tier>"
+  lore-power: "<gray>Güç: <white>%<power></white> <dark_gray>·</dark_gray> <gray>Bekleme: <white><cooldown> sn"
+  lore-use-weapon: "<dark_gray>Sağ tık ile yeteneği kullan."
+  lore-use-armor: "<dark_gray>Giyiliyken eğilip zıpla."
+  lore-smith: "<dark_gray>Döven: <smith>"
+
+  stats: "<prefix> <white><player></white><newline> <gray>Dövülen eşya: <white><crafted></white><newline> <gray>Kusursuz vuruş: <white><perfect></white><newline> <gray>En iyi kalite: <white><best></white>"
+  stats-empty: "<prefix> <gray>Bu oyuncu henüz bir şey dövmemiş."
+  list-header: "<prefix> <gray>Tezgahların:"
+  list-line: " <dark_gray>•</dark_gray> <white><world></white> <gray><x>, <y>, <z></gray> <dark_gray>(<count> malzeme, <crafts> dövme)"
+  list-empty: "<prefix> <gray>Hiç tezgahın yok."

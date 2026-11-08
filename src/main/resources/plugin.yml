@@ -1,0 +1,26 @@
+name: AuraForge
+version: '${version}'
+main: com.r0ine.auraforge.AuraForgePlugin
+api-version: '1.21'
+folia-supported: true
+author: r0ine
+description: Dünyaya kurulan, zamanlamayla dövülen yetenekli silah ve zırh tezgahı.
+
+commands:
+  auraforge:
+    description: AuraForge komutları
+    aliases: [af]
+    permission: auraforge.use
+
+permissions:
+  auraforge.use:
+    default: true
+  auraforge.place:
+    default: true
+  auraforge.give:
+    default: op
+  auraforge.reload:
+    default: op
+  auraforge.admin:
+    description: Başkalarının tezgahlarını yönetme ve tezgah sınırını aşma
+    default: op
