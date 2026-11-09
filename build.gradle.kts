@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.r0ine"
-version = "1.1.0"
+version = "1.2.0"
 
 repositories {
     mavenCentral()
@@ -16,13 +16,28 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0")
+    testImplementation(kotlin("test-junit5"))
+    testImplementation("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 kotlin {
     jvmToolchain(21)
 }
 
+val integration = sourceSets.create("integration") {
+    compileClasspath += sourceSets.main.get().output + sourceSets.main.get().compileClasspath
+}
+
+tasks.register<Jar>("integrationJar") {
+    dependsOn(tasks.named(integration.classesTaskName))
+    from(integration.output)
+    archiveBaseName.set("AuraForgeChecks")
+    archiveVersion.set("")
+}
+
 tasks {
+    test { useJUnitPlatform() }
     processResources {
         val props = mapOf("version" to project.version)
         inputs.properties(props)

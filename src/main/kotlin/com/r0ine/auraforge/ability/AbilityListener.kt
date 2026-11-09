@@ -25,6 +25,7 @@ class AbilityListener(private val plugin: AuraForgePlugin) : Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     fun onUse(event: PlayerInteractEvent) {
+        if (event.hand != org.bukkit.inventory.EquipmentSlot.HAND) return
         if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
         if (event.useItemInHand() == Event.Result.DENY) return
         val item = event.item ?: return
@@ -32,6 +33,11 @@ class AbilityListener(private val plugin: AuraForgePlugin) : Listener {
         val forged = plugin.items.read(item) ?: return
         val player = event.player
         if (plugin.crafting.isCrafting(player)) return
+        if (player.isSneaking && player.hasPermission("auraforge.use") && plugin.adventureMagic.cast(player)) {
+            event.setUseItemInHand(Event.Result.DENY)
+            event.setUseInteractedBlock(Event.Result.DENY)
+            return
+        }
 
         val pieces = plugin.abilities.armorPieces(player, forged.ability)
         val progress = plugin.items.progress(item)

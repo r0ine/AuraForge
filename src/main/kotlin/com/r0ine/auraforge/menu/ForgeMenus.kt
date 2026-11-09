@@ -54,6 +54,7 @@ class ForgeMenus(private val plugin: AuraForgePlugin) : Listener {
 
         inventory.setItem(RECIPES, icon(Material.KNOWLEDGE_BOOK, text.item("menu-recipes"), text.lines("menu-recipes-lore")))
         inventory.setItem(TAKE_ALL, icon(Material.HOPPER, text.item("menu-take-all")))
+        inventory.setItem(22, icon(Material.COMPASS, text.parse("<gold>+ Macera"), listOf(text.parse("<gray>Silah gelişimi, büyüler, setler ve wiki"))))
 
         val recipe = plugin.recipes.match(forge.materials())
         inventory.setItem(
@@ -90,6 +91,10 @@ class ForgeMenus(private val plugin: AuraForgePlugin) : Listener {
         }
 
         when (val slot = event.rawSlot) {
+            22 -> {
+                player.scheduler.run(plugin, { plugin.adventureMenus.open(player) }, null)
+                return
+            }
             in CONTENT_SLOTS -> plugin.forges.take(player, forge, slot - CONTENT_SLOTS.first)
             TAKE_ALL -> plugin.forges.takeAll(player, forge)
             RECIPES -> {

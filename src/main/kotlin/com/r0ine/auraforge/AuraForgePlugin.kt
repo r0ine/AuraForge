@@ -3,6 +3,10 @@ package com.r0ine.auraforge
 import com.r0ine.auraforge.ability.AbilityItems
 import com.r0ine.auraforge.ability.AbilityListener
 import com.r0ine.auraforge.ability.AbilityService
+import com.r0ine.auraforge.adventure.AdventureService
+import com.r0ine.auraforge.adventure.AdventureCombat
+import com.r0ine.auraforge.adventure.AdventureMagic
+import com.r0ine.auraforge.adventure.AdventureMenus
 import com.r0ine.auraforge.arcane.AltarListener
 import com.r0ine.auraforge.arcane.AltarManager
 import com.r0ine.auraforge.arcane.AltarMenus
@@ -87,6 +91,14 @@ class AuraForgePlugin : JavaPlugin() {
         private set
     lateinit var progressMenus: ProgressMenus
         private set
+    lateinit var adventure: AdventureService
+        private set
+    lateinit var adventureCombat: AdventureCombat
+        private set
+    lateinit var adventureMagic: AdventureMagic
+        private set
+    lateinit var adventureMenus: AdventureMenus
+        private set
 
     private lateinit var storage: Storage
     private val dirty = AtomicBoolean(false)
@@ -116,12 +128,17 @@ class AuraForgePlugin : JavaPlugin() {
         altars = AltarManager(this)
         altarMenus = AltarMenus(this)
         progressMenus = ProgressMenus(this)
+        adventure = AdventureService(this)
+        adventureCombat = AdventureCombat(this)
+        adventureMagic = AdventureMagic(this)
+        adventureMenus = AdventureMenus(this)
 
         storage = Storage(File(dataFolder, "data.json"), logger)
         val saved = storage.load()
         forges.load(saved.forges)
         altars.load(saved.altars)
         smiths.load(saved.smiths)
+        adventure.load(saved.adventurers)
 
         if (settings.forge.coreRecipe) core.registerRecipe()
         spellItems.registerRecipes()
@@ -136,6 +153,8 @@ class AuraForgePlugin : JavaPlugin() {
             SpellListener(this),
             ProgressListener(this),
             progressMenus,
+            adventureCombat,
+            adventureMenus,
         ).forEach { server.pluginManager.registerEvents(it, this) }
 
         getCommand("auraforge")?.let { command ->
@@ -147,7 +166,7 @@ class AuraForgePlugin : JavaPlugin() {
         forges.showLoaded()
         altars.showLoaded()
         startAutosave()
-        logger.info("${forges.all().size} tezgah, ${altars.all().size} masa, ${recipes.all.size} tarif ve ${spells.book.all.size} büyü yüklendi.")
+        logger.info("${forges.all().size} tezgah, ${altars.all().size} masa, ${recipes.all.size} tarif, ${spells.book.all.size} parşömen büyüsü; ayrıca 20 mühür, 10 araştırma büyüsü ve 5 set yüklendi.")
     }
 
     override fun onDisable() {
@@ -217,6 +236,6 @@ class AuraForgePlugin : JavaPlugin() {
     }
 
     private fun save() {
-        storage.write(SaveFile(forges = forges.records(), altars = altars.records(), smiths = smiths.snapshot()))
+        storage.write(SaveFile(forges = forges.records(), altars = altars.records(), smiths = smiths.snapshot(), adventurers = adventure.snapshot()))
     }
 }

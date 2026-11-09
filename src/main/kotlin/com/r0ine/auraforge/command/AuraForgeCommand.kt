@@ -18,6 +18,7 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         when (args.firstOrNull()?.lowercase()) {
+            "adventure" -> (sender as? Player)?.let { plugin.adventureMenus.open(it) } ?: text.send(sender, "player-only")
             "give" -> giveCore(sender, args)
             "item" -> giveForged(sender, args)
             "altar" -> giveAltarCore(sender, args)
@@ -225,6 +226,7 @@ class AuraForgeCommand(private val plugin: AuraForgePlugin) : TabExecutor {
 
     private companion object {
         val SUBCOMMANDS = linkedMapOf(
+            "adventure" to "auraforge.use",
             "recipes" to null,
             "spells" to null,
             "elements" to null,

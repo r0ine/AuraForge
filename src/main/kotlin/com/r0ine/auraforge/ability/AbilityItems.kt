@@ -123,6 +123,7 @@ class AbilityItems(private val plugin: AuraForgePlugin) {
                     )
                 }
                 if (!armor) addAll(progressLines(progress))
+                addAll(plugin.adventure.lore(meta))
                 add(text.item(if (armor) "lore-use-armor" else "lore-use-weapon"))
                 add(text.item("lore-smith", tag("smith", smith)))
             },

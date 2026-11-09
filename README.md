@@ -106,10 +106,112 @@ gerçek buz blokları, Magma Sütunu yerden çıkan magma, Taş Yumruk dönen ta
 kendi görselleri de aynı sistemle çalışır. Tüm entity'ler persistent değildir; chunk boşalınca kaybolur,
 yüklenince yönetici geri kurar.
 
+## Macera menüsü (1.2)
+
+Tezgah ve büyü masasında **+ Macera** düğmesi var. `/af adventure` da aynı menüyü açar.
+Eski + Gelişim, element yuvası ve üç dallı silah ağacı çalışmaya devam eder. Yeni menüdeki
+rehber; eşya üretiminden mühür, büyü ve set seçimine kadar ilerleme yolunu gösterir.
+
+Sekiz yeni sistem birbirini besler:
+
+1. **Maceracı ustalığı:** günlükteki bir yaratığı dövülmüş silahla öldürmek 10 XP ve 2 öz verir.
+   Her 100 XP bir rütbe; üst sınır 20. rütbe. Bu ilerleme oyuncuya, silahın eski seviyesi eşyaya aittir.
+2. **Silah mühürleri:** 20 özellikten seçerek silaha işle. Seviye 1'de bir, 10'da iki, 20'de üç yuva açılır.
+   İşleme bedeli `12 + gereken rütbe × 4` öz. İşlenmiş mühre tekrar tıklamak onu çıkarır; bedeli iade edilmez.
+3. **Set atölyesi:** beş setten birini elindeki dövülmüş zırha işle. Rütbe 3 ve parça başına 40 öz gerekir.
+   Aynı işlem eski seti değiştirir. Farklı setlerden iki parça giyerek 2+2 düzeni de kurulabilir.
+4. **Büyü araştırması ve mana:** aşağıdaki 10 büyü kalıcı öğrenilir. Seçili büyü, dövülmüş silahla
+   eğilerek sağ tıklayınca çalışır; normal sağ tık eski silah yeteneğini kullanır. Seçili büyüye tekrar
+   tıklamak seçimi kaldırır. Mana saniyede 4 yenilenir; sınır `100 + (rütbe − 1) × 2`.
+5. **Av sözleşmeleri:** sekiz türden birini seç, kabulden sonra belirtilen sayıda avla ve ödülü menüden al.
+   İlk görev 5 av, 15 öz ve 30 XP verir. Her teslimle hedef ve öz ödülü artar; sınır 15 av / 45 özdür.
+   Aynı anda tek sözleşme tutulur; iptal edilen sözleşmenin ilerlemesi silinir.
+6. **Yaratık günlüğü:** zombi, iskelet, örümcek, creeper, enderman, blaze, yağmacı ve wither iskeleti izlenir.
+   Her türde 10, 30 ve 75 av eşikleri sırasıyla 10, 30 ve 75 öz verir. Alınan her eşik ödülü o türe
+   kalıcı %2 ek hasar sağlar; toplam %6. Ödüller otomatik verilmez, günlükten alınır.
+7. **Kombo:** aynı hedefe 4 saniye içinde yapılan dolu yakın dövüş vuruşları zincir kurar.
+   Zincir 8'e kadar çıkar; ilk vuruştan sonraki her basamak %2 ek hasar verir. Hedef değiştirmek,
+   süreyi aşmak veya sunucudan çıkmak zinciri sıfırlar.
+8. **Söküm:** yedek dövülmüş eşyaları `4 + kalite/10 + arıtma×2` öz karşılığında tüketir.
+   Bölme aşağı yuvarlanır. Eşya önizlemesi ve ayrı onay düğmesi vardır; onay sırasında eldeki eşya
+   değişmişse işlem reddedilir. Eşya üzerindeki seviye, element ve mühürler geri verilmez.
+
+Spawner, spawn yumurtası ve dispenser yumurtası kaynaklı yaratıklar yeni maceracı/av/günlük ödüllerine
+sayılmaz. Hayvanlar, oyuncular ve zırh askıları bu av ekonomisinin dışındadır. Mühürlerin vuruş etkileri
+yalnızca en az %85 dolmuş doğrudan yakın dövüş saldırılarında çalışır; süpürme saldırısı zincir üretmez.
+
+### 20 silah özelliği
+
+| Mühür | Rütbe | Etki |
+|---|---:|---|
+| Kor İzi | 1 | 3 saniye yakma |
+| Kırağı | 1 | 2 saniye Yavaşlık I |
+| Zehir Dişi | 2 | Bağışık olmayan hedefe 3 saniye Zehir I |
+| Yırtılma | 3 | 2 saniye Wither I |
+| Son Hüküm | 4 | Canı %30 altında hedefe %20 hasar |
+| İlk Yara | 2 | Canı %90 üzerinde hedefe %20 hasar |
+| Dev Avcısı | 5 | Azami canı en az 40 olan hedefe %20 hasar |
+| Zırh Çatlağı | 4 | Zırh puanı başına %1 hasar, en fazla %20 |
+| Kan Bağı | 5 | Son hasarın %6'sı kadar iyileşme, vuruş başına en fazla 1 can |
+| Mana Sızıntısı | 2 | Vuruşta 3 mana |
+| İvme | 3 | Kombo başına %2 hasar, en fazla %16 |
+| Sırt Darbesi | 5 | Arkadan saldırıda %25 hasar |
+| Hava Avcısı | 4 | Yere basmayan hedefe %15 hasar |
+| Buz Kıran | 6 | Donmuş veya yavaş hedefe %18 hasar |
+| Köz Besleyen | 6 | Yanan hedefe %18 hasar |
+| Savuruş | 2 | Hedefi geri itme |
+| Ağırlık | 7 | Yatay hızı kesme ve yere bastırma |
+| Avcı Mührü | 3 | Günlükteki yaratık türlerine %12 hasar |
+| Odak | 7 | En az %80 manayla %12 hasar |
+| Ruh Hasadı | 8 | Uygun av öldürmelerinde fazladan 2 öz |
+
+### Büyü ağacı
+
+Araştırma bedeli `15 + gereken rütbe × 8` öz. Öğrenilen büyü tekrar satın alınmaz.
+Kök büyüler rütbe ve özle açılır; alt büyüler ayrıca öncülünü ister. Her kullanım kendi beklemesine
+ek olarak 1 saniyelik ortak bekleme başlatır. Çıkıp girmek beklemeleri silmez.
+
+| Büyü | Rütbe | Öncül | Mana / bekleme | Etki |
+|---|---:|---|---|---|
+| Kor Mızrağı | 1 | Kök | 18 / 6 sn | 18 blokta 6 hasar, 4 sn yanma |
+| Buz Hapishanesi | 2 | Kök | 22 / 9 sn | 16 blokta 4 hasar, 3 sn Yavaşlık IV |
+| Şimşek Örgüsü | 3 | Kök | 30 / 12 sn | 8 blokta en yakın 4 görünür hedefe 5 hasar |
+| Taş Deri | 2 | Kök | 22 / 14 sn | 6 sn Direnç II |
+| Yaşam Filizi | 3 | Kök | 30 / 16 sn | 6 can, 4 sn Yenilenme I |
+| Boşluk Kancası | 4 | Kor Mızrağı | 26 / 10 sn | 16 blokta 4 hasar, hedefi çekme |
+| Güneş Tacı | 6 | Kor Mızrağı | 40 / 18 sn | 6 blokta en çok 8 hedefe 7 hasar, kendi yanmanı söndürme |
+| Kristal Kırımı | 5 | Buz Hapishanesi | 32 / 12 sn | 7 blokta 5 hasar; donmuş/yavaş hedefe 9 |
+| Rüzgâr İzleri | 4 | Şimşek Örgüsü | 20 / 8 sn | İleri atılma, 5 sn Yavaş Düşüş ve Hız II |
+| Tutulma | 8 | Boşluk Kancası | 45 / 20 sn | 18 blokta 8 hasar; hedef %30 candan düşükse 12 |
+
+Hedefli büyüler duvar arkasını seçmez; alan büyüleri görüş hattını kontrol eder. Hedef bulunamazsa
+mana harcanmaz. Başlatılmış büyünün hasarı başka eklenti tarafından engellenirse mana ve bekleme
+harcanmış kalır, hedefe ek yanma/çekme gibi etkiler uygulanmaz. PvP kapalı dünyada oyuncular,
+dost ateşi kapalı aynı takımdakiler ve kendi evcil hayvanların hedef alınmaz.
+
+### Setler
+
+Her set miğfer, göğüslük, pantolon ve bot üzerinden dört parçaya tamamlanır. Mevcut dövme tarifleri
+bu dört ekipman türünü sağlar. Bonuslar eşya elde tutulunca değil, zırh yuvasına giyilince çalışır.
+
+| Set | 2 parça | 4 parça |
+|---|---|---|
+| Kül Muhafızı | Yanan hedefe %10 hasar | Ateş hasarı %35 azalır; vuruşlar yakar |
+| Buzul Nöbetçisi | Yakın dövüş hasarı %6 azalır | Vuran düşmana 2 sn Yavaşlık II |
+| Fırtına Gezgini | Kombo penceresi 6 sn olur | Tam vuruşta 2 sn Hız I |
+| Kök Bekçisi | Yakın dövüş, mermi ve büyü hasarı %8 azalır | Kombo 5'e ulaşınca 1 can |
+| Yıldız Dokumacı | Mana sınırına +20 | Büyülerin mana bedeli %20 azalır, yukarı yuvarlanır |
+
+Yeni oyuncu ilerlemesi, araştırmalar, sözleşmeler, mana ve beklemeler `data.json` içindeki
+`adventurers` alanında UUID ile saklanır. Eski kayıt dosyaları bu alan olmadan da açılır.
+Mühür ve setler eşyanın PDC verisine yazılır; eşya devredilince bunlar da devredilir.
+Yeni içerik dengeleri `adventure/AdventureCatalog.kt` ve ilgili Kotlin servislerinde tanımlıdır.
+
 ## Komutlar ve yetkiler
 
 | Komut | Yetki | Ne yapar |
 |---|---|---|
+| `/af adventure` | `auraforge.use` | Macera menüsü, mühürler, büyü araştırması, setler ve av günlüğü |
 | `/af recipes` | `auraforge.use` | Dövme tariflerini listeler |
 | `/af spells` | `auraforge.use` | Büyü kombinasyonlarını listeler |
 | `/af elements` | `auraforge.use` | Elementleri ve rune malzemelerini listeler |
@@ -128,10 +230,11 @@ yüklenince yönetici geri kurar.
 `auraforge.place` tezgah kurmayı, `auraforge.admin` başkasının tezgahını kullanmayı ve oyuncu başına
 tezgah sınırını aşmayı sağlar. Tezgah kurulurken bir `BlockPlaceEvent` sorgulanır, yani WorldGuard ya da
 claim eklentilerinin yasakladığı yere tezgah kurulamaz.
+`auraforge.cast` araştırılmış büyüleri ve eski parşömenleri kullanma yetkisidir; varsayılan olarak açıktır.
 
 ## Ayarlar
 
-Her şey `plugins/AuraForge/config.yml` içinde: tezgah bloğu, malzeme sınırı, animasyon aralığı, dövme
+`plugins/AuraForge/config.yml` içinde: tezgah bloğu, malzeme sınırı, animasyon aralığı, dövme
 zorluğu (tur sayısı, imleç hızı, bölge genişlikleri), kalite çarpanları, yetenek değerleri, set bonusu,
 silah seviyesi (`progression`), arıtma şans ve bedelleri (`enhance`), tarifler ve tüm mesajlar (MiniMessage). Yeni tarif eklemek için:
 
@@ -185,6 +288,25 @@ fun onCraft(event: ForgeCraftEvent) {
 
 Çıktı `build/libs/AuraForge-<sürüm>.jar`. Kotlin ve kotlinx kütüphaneleri jar'ın içine kendi paket
 adlarıyla gömülür, sunucudaki başka Kotlin eklentileriyle çakışmaz.
+
+### Doğrulama
+
+`./gradlew test` rütbe, araştırma önkoşulları, mana, mühür yuvaları ve kayıt uyumluluğu testlerini çalıştırır.
+Gerçek Paper kontrolü için `./gradlew build integrationJar` ile ayrıca `AuraForgeChecks.jar` üretilebilir.
+Bu kontrol eklentisi teslim jar'ına dahil değildir ve oyuncuların bulunduğu sunucuya kurulmaz.
+
+`scripts/integration-check.py`, verilen Paper 1.21.4 jar'ıyla `build` altında ayrı bir sunucu açar.
+Java 21, Paper jar'ı ve Mineflayer kurulu bir dizin gerekir. Örneğin:
+
+```powershell
+python scripts/integration-check.py --paper test-server/paper-1.21.4-232.jar --mineflayer ../mineflayer-test/node_modules/mineflayer --java 'C:/Program Files/Eclipse Adoptium/jdk-21.0.11.10-hotspot/bin/java.exe'
+```
+
+Varsayılan test portu 25586'dır; doluysa araç başlamadan durur. Test oyuncusu menü, savaş, araştırma,
+set, ödül ve söküm kontrollerine bağlanır. Araç sunucuyu kapatıp yeniden başlatarak kayıtları da sınar.
+Loglar oluşturulan `build/integration-server-<zaman>/phase-1.log` ve `phase-2.log` dosyalarında kalır.
+Canlı sunucuya sürüm geçirmek için eski jar'ın yedeğini al, sunucuyu kapat, `AuraForge-1.2.0.jar`
+dosyasını `plugins` içine yerleştir ve yeniden başlat; iki AuraForge jar'ını aynı anda bırakma.
 
 ## Lisans
 

@@ -329,6 +329,7 @@ messages:
   prefix: "<gradient:#FFB347:#FF5E62><bold>AuraForge</bold></gradient> <dark_gray>»</dark_gray>"
   help:
     - "<prefix> <gray>Komutlar:"
+    - "<yellow>/af adventure</yellow> <dark_gray>-</dark_gray> <gray>macera menüsü: mühürler, büyü ağacı, setler, av günlüğü"
     - "<yellow>/af recipes</yellow> <dark_gray>-</dark_gray> <gray>dövme tarifleri"
     - "<yellow>/af spells</yellow> <dark_gray>-</dark_gray> <gray>büyü kombinasyonları"
     - "<yellow>/af elements</yellow> <dark_gray>-</dark_gray> <gray>elementler ve rune malzemeleri"

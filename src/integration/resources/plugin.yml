@@ -1,0 +1,5 @@
+name: AuraForgeChecks
+version: '1.0'
+main: com.r0ine.auraforge.checks.AdventureChecks
+api-version: '1.21'
+depend: [AuraForge]

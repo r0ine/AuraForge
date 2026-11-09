@@ -75,6 +75,7 @@ class ProgressMenus(private val plugin: AuraForgePlugin) : Listener {
     private fun drawHub(player: Player, holder: ProgressView.Hub) {
         val inventory = holder.view
         fill(inventory, Material.BLACK_STAINED_GLASS_PANE)
+        inventory.setItem(38, icon(Material.COMPASS, text.parse("<gold>+ Macera"), listOf(text.parse("<gray>20 mühür, 10 büyü, setler ve maceracı rehberi"))))
         for (slot in listOf(1, 2, 3, 5, 6, 7)) inventory.setItem(slot, pane(Material.PURPLE_STAINED_GLASS_PANE))
 
         val item = player.inventory.itemInMainHand
@@ -341,6 +342,7 @@ class ProgressMenus(private val plugin: AuraForgePlugin) : Listener {
 
         when (holder) {
             is ProgressView.Hub -> when (event.rawSlot) {
+                38 -> player.scheduler.run(plugin, { plugin.adventureMenus.open(player) }, null)
                 ENHANCE -> enhance(player, holder)
                 TREE_BUTTON -> openTree(player, holder.altarId)
                 CODEX_BUTTON -> openCodex(player, holder.altarId)

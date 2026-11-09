@@ -1,5 +1,7 @@
 package com.r0ine.auraforge.core
 
+import com.r0ine.auraforge.adventure.Adventurer
+
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -48,6 +50,7 @@ data class SaveFile(
     val forges: List<ForgeRecord> = emptyList(),
     val smiths: Map<String, SmithRecord> = emptyMap(),
     val altars: List<AltarRecord> = emptyList(),
+    val adventurers: Map<String, Adventurer> = emptyMap(),
 )
 
 class Storage(private val file: File, private val logger: Logger) {

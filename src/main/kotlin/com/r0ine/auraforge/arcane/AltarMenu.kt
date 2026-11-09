@@ -83,6 +83,7 @@ class AltarMenus(private val plugin: AuraForgePlugin) : Listener {
         inventory.setItem(RECIPES, icon(Material.KNOWLEDGE_BOOK, text.item("altar-recipes"), text.lines("altar-recipes-lore")))
         inventory.setItem(CODEX, icon(Material.WRITABLE_BOOK, text.item("hub-codex"), text.lines("hub-codex-lore")))
         inventory.setItem(PROGRESS, icon(Material.NETHER_STAR, text.item("altar-progress"), text.lines("altar-progress-lore")))
+        inventory.setItem(23, icon(Material.COMPASS, text.parse("<gold>+ Macera"), listOf(text.parse("<gray>Mühürler, büyü ağacı, setler ve av günlüğü"))))
         inventory.setItem(DISMANTLE, icon(Material.ENCHANTING_TABLE, text.item("altar-dismantle"), text.lines("altar-dismantle-lore")))
 
         plugin.altars.refresh(altar, a, b, spell)
@@ -112,6 +113,10 @@ class AltarMenus(private val plugin: AuraForgePlugin) : Listener {
         }
 
         when (raw) {
+            23 -> {
+                event.isCancelled = true
+                player.scheduler.run(plugin, { plugin.adventureMenus.open(player) }, null)
+            }
             RUNE_1, RUNE_2 -> {
                 val cursor = event.cursor
                 val existing = top.getItem(raw)?.takeIf { it.type != Material.GRAY_STAINED_GLASS_PANE && it.type != Material.PURPLE_STAINED_GLASS_PANE }

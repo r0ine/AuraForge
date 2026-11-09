@@ -22,6 +22,7 @@ class ProgressListener(private val plugin: AuraForgePlugin) : Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     fun onHit(event: EntityDamageByEntityEvent) {
+        if (plugin.adventureCombat.isSecondary()) return
         if (event.cause != EntityDamageEvent.DamageCause.ENTITY_ATTACK && event.cause != EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return
         val player = event.damager as? Player ?: return
         val target = event.entity as? LivingEntity ?: return
